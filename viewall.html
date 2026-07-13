@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+ 
+  <meta name="description" content="XStream — Browse all premium adult videos. Filter by category, sort by trending, views, or likes.">
+  <meta name="keywords" content="adult videos, browse all, streaming, premium content, categories">
+  <meta name="author" content="XStream">
+  <meta property="og:title" content="XStream — Browse All Videos">
+  <meta property="og:description" content="Explore all premium 18+ videos filtered and sorted your way.">
+  <title>Browse All Movies — XStream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/hero1.css">
+</head>
+<body data-page="viewall">
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Navigation -->
+  <nav id="main-nav" class="navbar"></nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-overlay" class="mobile-overlay"></div>
+  <div id="mobile-menu" class="mobile-menu"></div>
+
+  <!-- Page Header — Cinematic Hero -->
+  <section class="page-header translated-hero">
+    <img id="translated-hero-image" src="https://ik.imagekit.io/s95tumxuk/IMG_3524.png" alt="">
+    <div class="page-header-content hero-content">
+      <div class="hero-left">
+        <nav class="breadcrumb" id="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current" id="breadcrumb-current">All Movies by vj's and Non translated</span>
+        </nav>
+        <h1 class="page-title" id="viewall-page-title">All Movies</h1>
+        <p class="page-subtitle" id="viewall-page-subtitle">Browse the complete collection of translated movies from top VJs worldwide.</p>
+        <div class="hero-stats" style="display:none;">
+          <div class="hero-stat-card">
+            <span class="hero-stat-icon">🌐</span>
+            <div class="hero-stat-info">
+              <span class="hero-stat-number">500+</span>
+              <span class="hero-stat-label">All Movies</span>
+            </div>
+          </div>
+          <div class="hero-stat-card">
+            <span class="hero-stat-icon">👥</span>
+            <div class="hero-stat-info">
+              <span class="hero-stat-number">35+</span>
+              <span class="hero-stat-label">VJs Worldwide</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <div class="content-grid">
+
+      <!-- Main Column -->
+      <div class="content-main">
+        
+    
+        <!-- Filter Bar -->
+        <div class="filter-bar" id="filter-bar">
+          <div class="filter-left">
+            <h2 class="section-title" id="viewall-title">
+              <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              All Movies
+            </h2>
+          </div>
+        <div class="filter-right">
+          
+              <!-- Live Search Bar -->
+    <div class="search-box" id="viewall-search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="viewall-search-input" placeholder="Search movies..." autocomplete="off" style="min-width: 220px;">
+      <button id="viewall-search-clear" style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px;" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+          
+  <select id="category-filter" class="filter-select">
+    <option value="all">All Categories</option>
+    <option value="action">Action</option>
+    <option value="adventure">Adventure</option>
+    <option value="animation">Animation</option>
+    <option value="biography">Biography</option>
+    <option value="coming-of-age">Coming of Age</option>
+    <option value="comedy">Comedy</option>
+    <option value="crime">Crime</option>
+    <option value="dark-comedy">Dark Comedy</option>
+    <option value="disaster">Disaster</option>
+    <option value="documentary">Documentary</option>
+    <option value="drama">Drama</option>
+    <option value="dystopian">Dystopian</option>
+    <option value="family">Family</option>
+    <option value="fantasy">Fantasy</option>
+    <option value="film-noir">Film Noir</option>
+    <option value="heist">Heist</option>
+    <option value="historical">Historical</option>
+    <option value="horror">Horror</option>
+    <option value="indie">Indie</option>
+    <option value="legal">Legal</option>
+    <option value="martial-arts">Martial Arts</option>
+    <option value="mockumentary">Mockumentary</option>
+    <option value="mystery">Mystery</option>
+    <option value="musical">Musical</option>
+    <option value="political">Political</option>
+    <option value="post-apocalyptic">Post-Apocalyptic</option>
+    <option value="psychological">Psychological</option>
+    <option value="religious">Religious</option>
+    <option value="romance">Romance</option>
+    <option value="sci-fi">Sci-Fi</option>
+    <option value="science-fiction">Science Fiction</option>
+    <option value="slasher">Slasher</option>
+    <option value="short-film">Short Film</option>
+    <option value="spy-espionage">Spy / Espionage</option>
+    <option value="sport">Sport</option>
+    <option value="supernatural">Supernatural</option>
+    <option value="survival">Survival</option>
+    <option value="thriller">Thriller</option>
+    <option value="war">War</option>
+    <option value="western">Western</option>
+   </select>
+   </select>
+    </div>
+  </div>
+
+  <!-- Active Search/Filters Display -->
+  <div class="active-filters" id="active-filters" style="display:none;">
+          <span class="active-filters-label">Showing results for:</span>
+          <div class="active-filter-chips" id="active-filter-chips"></div>
+          <button class="clear-filters-btn" id="clear-all-filters">Clear All</button>
+  </div>
+
+        <!-- Videos Grid -->
+        <section class="section">
+          <div class="video-grid" id="videos-grid">
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+          </div>
+          <div id="load-more-container" class="load-more-container" style="display:none;">
+            <button id="load-more-btn" class="btn-outline">Load More Videos</button>
+            <div id="load-more-spinner" class="spinner" style="display:none;"></div>
+          </div>
+          <div id="no-videos" class="empty-state" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m10 8 5 4-5 4V8z"/></svg>
+            <h3>No videos found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+            <a href="viewall.html" class="btn-accent" style="margin-top:16px; display:inline-flex; align-items:center; gap:8px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset Filters
+            </a>
+          </div>
+        </section>
+      </div
+      
+      
+
+  
+      
+      </aside>
+     </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="main-footer" class="footer"></footer>
+
+  <!-- Firebase SDKs — ONE version, loaded ONCE -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+  <!-- Duplicate-app guard: patches initializeApp so the
+       second call (from app.js) silently reuses the first
+       app instead of throwing. Must run BEFORE any file
+       that calls firebase.initializeApp(). -->
+  <script>
+    (function () {
+      var _orig = firebase.initializeApp;
+      firebase.initializeApp = function (opts, name) {
+        try {
+          return _orig.call(firebase, opts, name);
+        } catch (e) {
+          if (e.code === 'app/duplicate-app') {
+            console.warn('[Firebase] Duplicate init caught — reusing existing app.');
+            return firebase.app(name);
+          }
+          throw e;
+        }
+      };
+    })();
+  </script>
+
+  <!-- Your JS files — order matters: utilities first, then app, then page -->
+  <script src="js/optimizer.js"></script>
+  <script src="js/threat.js"></script>
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/viewall.js"></script>
+</body>
+</html>

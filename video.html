@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="description" content="Watch this Movie on Xstream.">
+  <title>Watch movie — Xstream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ad.css">
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       PREMIUM WATCH PAGE STYLES
+       Scoped to avoid conflicts with style.css
+       ═══════════════════════════════════════════════════ */
+
+    /* ── Player Fallback ── */
+    .player-fallback {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; background: #13131c; color: #555;
+    }
+    .player-fallback svg { opacity: .35; }
+    .player-fallback p { font-size: .9rem; }
+
+    /* ── Premium Info Card ── */
+    .info-card {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      background: #111119;
+      border: 1px solid #1c1c2c;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      animation: premFadeSlideUp .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .info-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #d4a24e, transparent);
+      opacity: .45;
+    }
+
+    /* ── Poster ── */
+    .info-poster {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,.55);
+      aspect-ratio: 2 / 3;
+      align-self: start;
+      background: #0e0e16;
+    }
+    .info-poster img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform .4s ease;
+    }
+    .info-poster:hover img { transform: scale(1.03); }
+    .poster-fallback {
+      width: 100%; height: 100%;
+      display: none; align-items: center; justify-content: center;
+      background: #0e0e16; color: #333; font-size: 2.8rem;
+    }
+
+    /* ── Details Column ── */
+    .info-details {
+      display: flex; flex-direction: column;
+      gap: 12px; min-width: 0;
+    }
+
+    /* Title */
+    .info-card .video-title {
+      font-size: 1.5rem; font-weight: 800;
+      line-height: 1.2; color: #ededf2;
+      letter-spacing: -.02em; margin: 0;
+    }
+
+    /* ── Meta Row: Year | Rated | Runtime | Country ── */
+    .info-meta-row {
+      display: flex; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+      font-size: .85rem; color: #9090a8;
+    }
+    .meta-year {
+      font-weight: 700; color: #d8d8e4; font-size: .9rem;
+    }
+    .rated-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      line-height: 1.6; color: #fff;
+    }
+    .meta-runtime, .meta-country {
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .meta-runtime i, .meta-country i {
+      font-size: .72rem; color: #55556a;
+    }
+
+    /* ── Genre Chips ── */
+    .info-genres { display: flex; flex-wrap: wrap; gap: 6px; }
+    .genre-chip {
+      display: inline-block; padding: 4px 12px;
+      background: rgba(212,162,78,.06);
+      border: 1px solid rgba(212,162,78,.14);
+      border-radius: 20px; font-size: .74rem;
+      font-weight: 500; color: #d4a24e;
+      letter-spacing: .01em;
+      transition: background .2s, border-color .2s;
+    }
+    .genre-chip:hover {
+      background: rgba(212,162,78,.12);
+      border-color: rgba(212,162,78,.28);
+    }
+
+    /* ── IMDb Rating Box ── */
+    .info-imdb {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 7px 14px; width: fit-content;
+      background: linear-gradient(135deg, rgba(245,197,24,.07), rgba(245,197,24,.02));
+      border: 1px solid rgba(245,197,24,.14);
+      border-radius: 6px;
+    }
+    .imdb-label {
+      font-size: .78rem; font-weight: 800;
+      color: #f5c518; letter-spacing: .08em;
+    }
+    .imdb-rating {
+      font-size: 1.15rem; font-weight: 800;
+      color: #f5c518; line-height: 1;
+    }
+    .imdb-out-of {
+      font-size: .76rem; color: #55556a; font-weight: 400;
+    }
+
+    /* ── Crew Info ── */
+    .info-crew { display: flex; flex-direction: column; gap: 5px; }
+    .info-crew-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .86rem; color: #9090a8;
+    }
+    .info-crew-item i {
+      width: 16px; text-align: center;
+      font-size: .74rem; color: #55556a;
+    }
+    .info-crew-item span { color: #d0d0de; font-weight: 500; }
+
+    /* ── Description ── */
+    .info-description { position: relative; }
+    .desc-text {
+      font-size: .87rem; color: #9090a8;
+      line-height: 1.65; overflow: hidden;
+      transition: max-height .35s ease;
+    }
+    .desc-text.collapsed { max-height: 4.2em; }
+    .desc-text.expanded { max-height: 600px; }
+    .read-more-btn {
+      display: none; margin-top: 5px;
+      font-size: .8rem; font-weight: 600;
+      color: #d4a24e; padding: 0;
+      transition: color .2s;
+    }
+    .read-more-btn:hover { color: #e4b45e; }
+
+    /* ── Action Buttons Row ── */
+    .info-actions-row {
+      display: flex; align-items: center;
+      flex-wrap: wrap; gap: 8px;
+      padding: 16px 24px;
+      background: #111119;
+      border-left: 1px solid #1c1c2c;
+      border-right: 1px solid #1c1c2c;
+      animation: premFadeSlideUp .5s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .info-actions-row .action-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 24px;
+      font-size: .82rem; font-weight: 500;
+      color: #a0a0b8; background: #1a1a26;
+      border: 1px solid #252538;
+      transition: all .2s ease;
+    }
+    .info-actions-row .action-btn svg {
+      width: 16px; height: 16px; flex-shrink: 0;
+    }
+    .info-actions-row .action-btn:hover {
+      color: #e8e8f0; background: #222234;
+      border-color: #333348;
+    }
+    .info-actions-row .action-btn.favourited {
+      color: #ef4444; border-color: rgba(239,68,68,.3);
+      background: rgba(239,68,68,.08);
+    }
+    .info-actions-row .action-btn.downloading {
+      opacity: .7; pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESUME DIALOG — Flutter-style
+       ═══════════════════════════════════════════════════ */
+    #resume-dialog {
+      display: none;
+      position: fixed; inset: 0; z-index: 99999;
+      align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    #resume-dialog.resume-visible { opacity: 1; }
+    #resume-dialog.resume-hiding { opacity: 0; }
+
+    .resume-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .resume-card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 340px;
+      background: #1a1a26;
+      border: 1px solid #2a2a3c;
+      border-radius: 22px;
+      padding: 0; overflow: hidden;
+      transform: scale(.92);
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+    #resume-dialog.resume-visible .resume-card { transform: scale(1); }
+    #resume-dialog.resume-hiding .resume-card { transform: scale(.92); }
+
+    .resume-thumbnail {
+      width: 100%; aspect-ratio: 16 / 9;
+      background: #0e0e16; overflow: hidden;
+    }
+    .resume-thumbnail img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .resume-thumbnail i {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      font-size: 2.5rem; color: #333;
+    }
+
+    .resume-card-body { padding: 20px 24px 24px; text-align: center; }
+
+    .resume-title {
+      font-size: 1.15rem; font-weight: 700;
+      color: #ededf2; margin: 0 0 4px;
+      line-height: 1.3;
+    }
+    .resume-subtitle {
+      font-size: .82rem; color: #6a6a82;
+      margin: 0 0 2px;
+    }
+    .resume-time {
+      font-size: 1.6rem; font-weight: 800;
+      color: #d4a24e; margin: 0 0 20px;
+      letter-spacing: .02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .resume-buttons {
+      display: flex; gap: 10px;
+    }
+    .resume-btn {
+      flex: 1; padding: 12px 0;
+      border-radius: 14px; font-size: .9rem;
+      font-weight: 600; font-family: 'Poppins', sans-serif;
+      transition: all .2s ease;
+    }
+    .resume-btn-primary {
+      background: #d4a24e; color: #0a0a0f;
+    }
+    .resume-btn-primary:hover { background: #e4b45e; }
+    .resume-btn-secondary {
+      background: transparent; color: #9090a8;
+      border: 1px solid #2a2a3c;
+    }
+    .resume-btn-secondary:hover {
+      color: #c0c0d0; border-color: #3a3a50;
+      background: rgba(255,255,255,.03);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════════════ */
+    @keyframes premFadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE — Mobile Stacking
+       ═══════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .info-card {
+        grid-template-columns: 1fr;
+        gap: 18px; padding: 18px;
+        border-radius: 0 0 12px 12px;
+      }
+      .info-poster {
+        max-width: 160px; margin: 0 auto;
+        align-self: center;
+      }
+      .info-card .video-title {
+        font-size: 1.25rem; text-align: center;
+      }
+      .info-meta-row { justify-content: center; }
+      .info-genres { justify-content: center; }
+      .info-imdb { margin: 0 auto; }
+      .info-crew { align-items: center; }
+      .info-description { text-align: center; }
+
+      .info-actions-row {
+        padding: 12px 16px; gap: 6px;
+        border-radius: 0;
+        justify-content: center;
+      }
+      .info-actions-row .action-btn {
+        padding: 7px 12px; font-size: .76rem;
+      }
+      .info-actions-row .action-btn span.btn-text-label {
+        display: none;
+      }
+
+      .resume-card { max-width: 300px; border-radius: 18px; }
+      .resume-title { font-size: 1.05rem; }
+      .resume-time { font-size: 1.4rem; }
+      .resume-btn { padding: 11px 0; font-size: .85rem; border-radius: 12px; }
+    }
+
+    @media (max-width: 400px) {
+      .info-poster { max-width: 140px; }
+      .info-card .video-title { font-size: 1.1rem; }
+      .info-actions-row .action-btn { padding: 6px 10px; font-size: .72rem; }
+    }
+  </style>
+</head>
+<body data-page="video">
+
+  <div id="toast-container"></div>
+  <nav id="main-nav" class="navbar"></nav>
+
+  <main class="video-page-main">
+    <div class="video-page-grid">
+
+      <!-- Video Player Column -->
+      <div class="video-player-col">
+        <!-- Player -->
+        <div class="video-player-wrapper" id="video-player-wrapper">
+          <div class="skeleton skeleton-player"></div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════
+             VIDEO INFO — Premium Restructured Layout
+             ══════════════════════════════════════════════ -->
+        <div class="video-info" id="video-info" style="display:none;">
+
+          <!-- Premium Info Card: Poster + Details -->
+          <div class="info-card">
+            <div class="info-poster">
+              <img id="info-poster-img" src="" alt="" style="display:none"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="poster-fallback"><i class="fas fa-film"></i></div>
+            </div>
+            <div class="info-details">
+              <h1 class="video-title" id="video-title"></h1>
+
+              <!-- Year · Rated · Runtime · Country -->
+              <div class="info-meta-row">
+                <span class="meta-year" id="info-year"></span>
+                <span class="rated-badge" id="info-rated" style="display:none"></span>
+                <span class="meta-runtime" id="info-runtime" style="display:none"></span>
+                <span class="meta-country" id="info-country" style="display:none"></span>
+              </div>
+
+              <!-- Genre Chips -->
+              <div class="info-genres" id="info-genres" style="display:none"></div>
+
+              <!-- IMDb Rating -->
+              <div class="info-imdb" style="display:none">
+                <span class="imdb-label">IMDb</span>
+                <span class="imdb-rating" id="imdb-rating"></span>
+                <span class="imdb-out-of">/ 10</span>
+              </div>
+
+              <!-- Crew: Director + VJ -->
+              <div class="info-crew">
+                <div class="info-crew-item" id="info-director" style="display:none"></div>
+                <div class="info-crew-item" id="info-vj" style="display:none"></div>
+              </div>
+
+              <!-- Description with Read More -->
+              <div class="info-description">
+                <p class="desc-text collapsed" id="desc-text"></p>
+                <button class="read-more-btn" id="read-more-btn">Read More</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons Row -->
+          <div class="info-actions-row">
+            <button class="action-btn" id="like-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+              <span id="like-count">0</span>
+            </button>
+            <button class="action-btn" id="dislike-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
+              <span id="dislike-count">0</span>
+            </button>
+            <button class="action-btn" id="share-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <span class="btn-text-label">Share</span>
+            </button>
+            <button class="action-btn" id="favourite-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="favourite-label" class="btn-text-label">Add to Watchlist</span>
+            </button>
+            <button class="action-btn" id="download-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 8 12 3 17 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span class="btn-text-label">Download</span>
+            </button>
+          </div>
+
+          <!-- ═══ LEGACY — Hidden, kept for JS backward compatibility ═══ -->
+          <div class="video-meta" style="display:none !important;">
+            <div class="video-stats">
+              <span class="stat-item" id="video-views">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span>0 views</span>
+              </span>
+              <span class="stat-item" id="video-date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span></span>
+              </span>
+              <span class="stat-item" id="video-country-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span></span>
+              </span>
+            </div>
+          </div>
+          <div class="video-description-box" style="display:none !important;">
+            <p id="video-description"></p>
+          </div>
+        </div>
+        <!-- End Video Info -->
+
+        <div class="social-nav-buttons">
+          <a href="https://t.me/xstreamfilms" target="_blank" rel="noopener noreferrer" class="social-nav-btn social-nav-btn--telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Join Channal
+          </a>
+          <a href="https://whatsapp.com/channel/0029Vb7mjGr2v1Ijuvz2CL1n" target="_blank" rel="noopener noreferrer" class="social-nav-btn social-nav-btn--whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp channal
+          </a>
+          <a href="https://youtube.com/@xstreamflims?si=yvK4AwmC3VcMJSzz" target="_blank" rel="noopener noreferrer" class="social-nav-btn social-nav-btn--youtube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Subscribe
+          </a>
+        </div>
+
+        <!-- Video Not Found -->
+        <div id="video-not-found" class="empty-state" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <h3>Movie Not Found</h3>
+          <p>This video may have been removed or doesn't exist.</p>
+          <a href="index.html" class="btn-accent">Back to Home</a>
+        </div>
+      </div>
+
+      <!-- Related Videos Sidebar -->
+      <aside class="related-sidebar">
+        <h3 class="related-title">Related Videos</h3>
+        <div id="related-videos" class="related-list widget-video-list">
+          <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <aside class="Adverts-sidebar">
+    <h3 class="Adverts-title">Adverts</h3>
+    <div class="ad-banner-wrapper" id="ad-banner-top"></div>
+    <div class="ad-banner-wrapper" id="ad-banner-bottom"></div>
+  </aside>
+
+  <footer id="main-footer" class="footer"></footer>
+
+  <!-- ═══ Resume Dialog Container ═══ -->
+  <div id="resume-dialog"></div>
+
+  <!-- Offline Manager -->
+  <script src="js/offline-manager.js"></script>
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').catch(function(err) {
+          console.warn('SW registration failed:', err);
+        });
+      });
+    }
+  </script>
+
+  <script src="js/optimizer.js"></script>
+  <script src="js/threat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       UPGRADED WATCH PAGE JS
+       Overrides initVideoPage & renderVideoPlayer from app.js
+       All other app.js functions remain untouched.
+       ═══════════════════════════════════════════════════════════ -->
+  <script>
+  /* ── Resume Watching — Storage ── */
+  var RESUME_STORAGE_KEY = 'xstream_resume_progress';
+  var PLAYBACK_SETTINGS_KEY = 'xstream_playback_settings';
+  var AUTO_RESUME = false;
+  var _resumeCleanup = null;
+
+  function getResumeData() {
+    try { return JSON.parse(localStorage.getItem(RESUME_STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveResumeProgress(movieId, title, thumbnail, currentTime, duration) {
+    var data = getResumeData();
+    data[movieId] = { movieId:movieId, title:title, thumbnail:thumbnail, currentTime:currentTime, duration:duration, lastWatched:Date.now() };
+    try { localStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+  function getMovieResume(movieId) {
+    var data = getResumeData(); return data[movieId] || null;
+  }
+  function removeMovieResume(movieId) {
+    var data = getResumeData(); delete data[movieId];
+    try { localStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  /* ── Playback Settings ── */
+  function savePlaybackSettings(videoEl) {
+    var s = { playbackRate:videoEl.playbackRate||1, volume:videoEl.volume, muted:videoEl.muted };
+    try { localStorage.setItem(PLAYBACK_SETTINGS_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function restorePlaybackSettings(videoEl) {
+    try {
+      var raw = localStorage.getItem(PLAYBACK_SETTINGS_KEY); if (!raw) return;
+      var s = JSON.parse(raw);
+      if (s.playbackRate && s.playbackRate !== 1) videoEl.playbackRate = s.playbackRate;
+      if (typeof s.volume === 'number') videoEl.volume = s.volume;
+      if (typeof s.muted === 'boolean') videoEl.muted = s.muted;
+    } catch (e) {}
+  }
+
+  /* ── Resume Tracking Engine ── */
+  function startResumeTracking(videoEl, movieId, title, thumbnail) {
+    if (_resumeCleanup) { _resumeCleanup(); _resumeCleanup = null; }
+    var interval = null;
+    function save() {
+      if (!videoEl || !videoEl.duration || !isFinite(videoEl.duration)) return;
+      var ct = videoEl.currentTime, dur = videoEl.duration;
+      if (ct >= dur * 0.95) { removeMovieResume(movieId); clearAll(); return; }
+      if (ct > 5) saveResumeProgress(movieId, title, thumbnail, ct, dur);
+    }
+    function onVisChange() { if (document.hidden) save(); }
+    function onEnded() { removeMovieResume(movieId); clearAll(); }
+    function clearAll() {
+      if (interval) { clearInterval(interval); interval = null; }
+      window.removeEventListener('beforeunload', save);
+      window.removeEventListener('pagehide', save);
+      document.removeEventListener('visibilitychange', onVisChange);
+      if (videoEl) { videoEl.removeEventListener('pause', save); videoEl.removeEventListener('ended', onEnded); }
+    }
+    interval = setInterval(save, 5000);
+    window.addEventListener('beforeunload', save);
+    window.addEventListener('pagehide', save);
+    document.addEventListener('visibilitychange', onVisChange);
+    videoEl.addEventListener('pause', save);
+    videoEl.addEventListener('ended', onEnded);
+    videoEl.addEventListener('ratechange', function() { savePlaybackSettings(videoEl); });
+    videoEl.addEventListener('volumechange', function() { savePlaybackSettings(videoEl); });
+    _resumeCleanup = clearAll;
+  }
+
+  /* ── Resume Dialog ── */
+  function showResumeDialog(movieId, title, thumbnail, resumeTime, duration, onResume, onStartOver) {
+    var overlay = document.getElementById('resume-dialog');
+    if (!overlay) return;
+    var timeStr = formatTime(resumeTime);
+    overlay.innerHTML =
+      '<div class="resume-backdrop"></div>' +
+      '<div class="resume-card">' +
+        '<div class="resume-thumbnail">' +
+          (thumbnail ? '<img src="'+thumbnail+'" alt="'+escapeHTML(title)+'" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-film\\\'></i>\'">' : '<i class="fas fa-film"></i>') +
+        '</div>' +
+        '<div class="resume-card-body">' +
+          '<h3 class="resume-title">'+escapeHTML(title)+'</h3>' +
+          '<p class="resume-subtitle">Resume from</p>' +
+          '<p class="resume-time">'+timeStr+'</p>' +
+          '<div class="resume-buttons">' +
+            '<button class="resume-btn resume-btn-primary" id="resume-yes-btn">Resume</button>' +
+            '<button class="resume-btn resume-btn-secondary" id="resume-no-btn">Start Over</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    overlay.style.display = 'flex';
+    void overlay.offsetHeight;
+    overlay.classList.add('resume-visible');
+    document.getElementById('resume-yes-btn').addEventListener('click', function() { if (onResume) onResume(); dismissResumeDialog(); });
+    document.getElementById('resume-no-btn').addEventListener('click', function() { if (onStartOver) onStartOver(); dismissResumeDialog(); });
+    overlay.querySelector('.resume-backdrop').addEventListener('click', function() { if (onStartOver) onStartOver(); dismissResumeDialog(); });
+  }
+  function dismissResumeDialog() {
+    var overlay = document.getElementById('resume-dialog'); if (!overlay) return;
+    overlay.classList.remove('resume-visible'); overlay.classList.add('resume-hiding');
+    setTimeout(function() { overlay.style.display='none'; overlay.classList.remove('resume-hiding'); overlay.innerHTML=''; }, 300);
+  }
+
+  /* ── Setup Resume ── */
+  function setupResumeWatching(videoData, videoId) {
+    var videoEl = document.querySelector('#video-player-wrapper video');
+    if (!videoEl) return;
+    var movieId = videoData._id || videoId;
+    var title = videoData.title || 'Unknown';
+    var thumbnail = '';
+    try { thumbnail = getThumbnailUrl(videoData) || ''; } catch (e) {}
+    restorePlaybackSettings(videoEl);
+    var resume = getMovieResume(movieId);
+    var needsResume = resume && resume.currentTime > 30 && resume.duration > 0 && isFinite(resume.duration) && resume.currentTime < resume.duration * 0.95;
+    function handleReady() {
+      videoEl.removeEventListener('loadedmetadata', handleReady);
+      videoEl.removeEventListener('canplay', handleReady);
+      if (needsResume) {
+        if (AUTO_RESUME) { videoEl.currentTime = resume.currentTime; }
+        else {
+          videoEl.pause();
+          showResumeDialog(movieId, title, thumbnail, resume.currentTime, resume.duration,
+            function() { videoEl.currentTime = resume.currentTime; videoEl.play().catch(function(){}); },
+            function() { removeMovieResume(movieId); }
+          );
+        }
+      }
+    }
+    if (videoEl.readyState >= 1) handleReady();
+    else { videoEl.addEventListener('loadedmetadata', handleReady); videoEl.addEventListener('canplay', handleReady); }
+    startResumeTracking(videoEl, movieId, title, thumbnail);
+  }
+
+  /* ── Metadata Helpers ── */
+  function formatTime(seconds) {
+    if (!seconds || !isFinite(seconds)) return '0:00';
+    var h = Math.floor(seconds/3600), m = Math.floor((seconds%3600)/60), s = Math.floor(seconds%60);
+    if (h > 0) return h+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    return m+':'+String(s).padStart(2,'0');
+  }
+  function formatRuntime(val) {
+    if (!val) return '';
+    if (typeof val === 'string') return val;
+    var n = parseInt(val,10); if (isNaN(n)||n<=0) return '';
+    var h=Math.floor(n/60), m=n%60;
+    if (h>0) return h+'h '+m+'m'; return m+'m';
+  }
+  function createGenreChips(genreStr) {
+    if (!genreStr) return '';
+    var genres = genreStr.split(/[,•\/|]+/).map(function(g){return g.trim();}).filter(Boolean);
+    if (!genres.length) return '';
+    return genres.map(function(g){ return '<span class="genre-chip">'+escapeHTML(g)+'</span>'; }).join('');
+  }
+  function getRatedColor(rated) {
+    var r = (rated||'').toUpperCase().trim();
+    switch(r) {
+      case 'G': return '#22c55e'; case 'PG': return '#3b82f6'; case 'PG-13': return '#f59e0b';
+      case 'R': return '#ef4444'; case 'NC-17': case 'X': return '#9333ea';
+      case 'TV-MA': return '#ef4444'; case 'TV-14': return '#f59e0b'; case 'TV-PG': return '#3b82f6';
+      default: return '#6b7280';
+    }
+  }
+  function getPosterUrl(videoData) {
+    if (!videoData) return '';
+    return videoData.posterUrl || videoData.image || videoData.thumbnailUrl ||
+      (typeof getThumbnailUrl === 'function' ? getThumbnailUrl(videoData) : '') || '';
+  }
+  function initReadMore() {
+    var descText = document.getElementById('desc-text');
+    var btn = document.getElementById('read-more-btn');
+    if (!descText || !btn) return;
+    var fullText = descText.textContent || '';
+    if (fullText.length <= 160) { btn.style.display='none'; return; }
+    descText.classList.add('collapsed'); btn.style.display='inline-block'; btn.textContent='Read More';
+    btn.addEventListener('click', function() {
+      if (descText.classList.contains('collapsed')) {
+        descText.classList.remove('collapsed'); descText.classList.add('expanded'); btn.textContent='Read Less';
+      } else {
+        descText.classList.remove('expanded'); descText.classList.add('collapsed'); btn.textContent='Read More';
+      }
+    });
+  }
+
+  /* ── Page Cleanup ── */
+  window.addEventListener('beforeunload', function() { if (_resumeCleanup) { _resumeCleanup(); _resumeCleanup=null; } });
+
+  /* ═══════════════════════════════════════════════════
+     OVERRIDDEN: initVideoPage
+     ═══════════════════════════════════════════════════ */
+  function initVideoPage() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var videoId = urlParams.get('id');
+    var isOffline = urlParams.get('offline') === 'true';
+
+    if (isOffline) {
+      OfflineDB.getVideo(videoId).then(function(data) {
+        if (!data || !data.blob) { showToast('Offline file not found.','error'); showVideoNotFound(); return; }
+        var wrapper = document.getElementById('video-player-wrapper');
+        var info = document.getElementById('video-info');
+        var notFound = document.getElementById('video-not-found');
+        if (notFound) notFound.style.display = 'none';
+        if (wrapper && info) {
+          var blobUrl = URL.createObjectURL(data.blob);
+          wrapper.innerHTML = '<video controls playsinline class="main-video" src="'+blobUrl+'">Your browser does not support the video tag.</video>';
+          var videoTitle = document.getElementById('video-title');
+          if (videoTitle) videoTitle.textContent = data.title || 'Offline Video';
+          var videoDescription = document.getElementById('video-description');
+          if (videoDescription) videoDescription.textContent = 'You are watching this offline. No internet connection is required.';
+          info.style.display = 'block';
+          document.title = (data.title || 'Offline Video') + ' — Xstream';
+          /* Resume support for offline */
+          setTimeout(function() {
+            var offVid = wrapper.querySelector('video');
+            if (offVid) setupResumeWatching({ _id:videoId, title:data.title||'Offline Video' }, videoId);
+          }, 200);
+        }
+      }).catch(function() { showVideoNotFound(); });
+      return;
+    }
+
+    if (!videoId) { showVideoNotFound(); return; }
+
+    function fetchVideoFromBothPaths(id) {
+      return database.ref('description/'+id).once('value').then(function(snapshot) {
+        var data = snapshot.val();
+        if (data && data.title) { data._id=id; data._isTranslated=false; return data; }
+        return database.ref('Translated/'+id).once('value').then(function(transSnap) {
+          var transData = transSnap.val();
+          if (transData && transData.title) { transData._id=id; transData._isTranslated=true; return transData; }
+          return null;
+        });
+      });
+    }
+
+    fetchVideoFromBothPaths(videoId).then(function(videoData) {
+      if (!videoData) { showVideoNotFound(); return; }
+      window.currentVideoData = videoData;
+      renderVideoPlayer(videoData);
+      incrementViews(videoId);
+      setupResumeWatching(videoData, videoId);
+
+      (function() {
+        setTimeout(function() {
+          var descBox = document.querySelector('.video-description-box');
+          if (descBox && videoData) {
+            var thumbUrl = getThumbnailUrl(videoData);
+            descBox.insertAdjacentHTML('afterbegin','<div class="desc-thumbnail-wrapper"><img src="'+thumbUrl+'" alt="'+escapeHTML(videoData.title||'Movie')+' Thumbnail" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>');
+          }
+        }, 50);
+      })();
+
+      /* Like / Dislike */
+      var likeBtn = document.getElementById('like-btn');
+      var dislikeBtn = document.getElementById('dislike-btn');
+      if (likeBtn) likeBtn.addEventListener('click', function() { toggleLike(videoId); });
+      if (dislikeBtn) dislikeBtn.addEventListener('click', function() { toggleDislike(videoId); });
+
+      /* Share */
+      function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(function(){ showToast('Link & details copied to clipboard! 📋','success'); }).catch(function(){ fallbackCopy(text); });
+        } else { fallbackCopy(text); }
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;left:-9999px;top:-9999px;opacity:0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        try { document.execCommand('copy'); showToast('Link & details copied! 📋','success'); } catch(e){ showToast('Could not copy — please share manually','warning'); }
+        document.body.removeChild(ta);
+      }
+      function updateShareMeta(title,description,imageUrl,url) {
+        setMeta('og:title',title,'property'); setMeta('og:description',description,'property');
+        setMeta('og:image',imageUrl,'property'); setMeta('og:url',url,'property');
+        setMeta('og:type','video.movie','property'); setMeta('twitter:card','summary_large_image','name');
+        setMeta('twitter:title',title,'name'); setMeta('twitter:description',description,'name');
+        setMeta('twitter:image',imageUrl,'name');
+      }
+      function setMeta(key,content,attr) {
+        var el = document.querySelector('meta['+attr+'="'+key+'"]');
+        if (el) el.setAttribute('content',content);
+        else { var m=document.createElement('meta'); m.setAttribute(attr,key); m.setAttribute('content',content); document.head.appendChild(m); }
+      }
+
+      var shareBtn = document.getElementById('share-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', function() {
+          var vd = window.currentVideoData || {};
+          var title = vd.title || (document.getElementById('video-title')?document.getElementById('video-title').textContent.trim():'') || document.title || 'Amazing Movie';
+          var year=vd.year||'', genre=vd.genre||'', rating=vd.imdbRating||'', director=vd.director||'', thumbnail=vd.thumbnailUrl||'', url=window.location.href;
+          var line='━━━━━━━━━━━━━━━━━━\n';
+          var shareText=line+'🎬 XSTRΞAM FLIMS\n'+line+'\n🔥 "'+title+'"\n\n';
+          if(year) shareText+='📅 Year: '+year+'\n';
+          if(rating) shareText+='⭐ IMDB: '+rating+'/10\n';
+          if(genre) shareText+='🎭 Genre: '+genre+'\n';
+          if(director) shareText+='🎥 Director: '+director+'\n';
+          shareText+='\n✨ Watch it FREE in HD quality!\n🚀 No ads, no signup hassle.\n\n👇 Watch now:\n'+url+'\n\n'+line+'📖 "Where every frame tells a story"\n'+line;
+          var ogDesc='Watch "'+title+'"';
+          if(year) ogDesc+=' ('+year+')'; if(rating) ogDesc+=' — ⭐ '+rating+'/10'; if(genre) ogDesc+=' — '+genre;
+          ogDesc+=' only on XSTREAM FLIMS. Free HD streaming, no ads!';
+          updateShareMeta(title+' — XSTREAM FLIMS',ogDesc,thumbnail,url);
+          var shareData={title:'🎬 '+title+' — XSTREAM FLIMS',text:shareText,url:url};
+          if(navigator.share){navigator.share(shareData).then(function(){showToast('Shared successfully! 🎉','success');}).catch(function(err){if(err.name!=='AbortError')copyToClipboard(shareText);});}
+          else{copyToClipboard(shareText);}
+        });
+      }
+
+      /* Favourite */
+      var favouriteBtn = document.getElementById('favourite-btn');
+      var favouriteLabel = document.getElementById('favourite-label');
+      if (favouriteBtn) {
+        var isFav = AppState.favouriteVideos.indexOf(videoId) >= 0;
+        favouriteBtn.classList.toggle('favourited', isFav);
+        if (favouriteLabel) favouriteLabel.textContent = isFav ? 'Favourited' : 'Favourite';
+        favouriteBtn.addEventListener('click', function() {
+          if (!AppState.currentUser) { showToast('Please sign in to add favourites','warning'); return; }
+          toggleFavourite(videoId);
+          var nowFav = AppState.favouriteVideos.indexOf(videoId) >= 0;
+          favouriteBtn.classList.toggle('favourited', nowFav);
+          if (favouriteLabel) favouriteLabel.textContent = nowFav ? 'Favourited' : 'Favourite';
+          showToast(nowFav ? 'Added to favourites' : 'Removed from favourites', nowFav ? 'success' : 'info');
+        });
+      }
+
+      /* Download */
+      var downloadBtn = document.getElementById('download-btn');
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+          var videoUrl = getVideoUrl(videoData);
+          if (!videoUrl) { showToast('Movie file not available for download','error'); return; }
+          if (!AppState.currentUser) { showToast('Please sign in to download movies','warning'); return; }
+          downloadBtn.classList.add('downloading');
+          var dlText = downloadBtn.childNodes[downloadBtn.childNodes.length-1];
+          var originalText = dlText.textContent; dlText.textContent = 'Fetching...';
+          downloadForOffline(videoId, videoUrl, videoData.title||'Video')
+            .then(function(){ dlText.textContent='Saved!'; setTimeout(function(){ downloadBtn.classList.remove('downloading'); dlText.textContent=originalText; },2000); })
+            .catch(function(){ downloadBtn.classList.remove('downloading'); dlText.textContent=originalText; });
+        });
+      }
+
+      updateLikeDislikeUI(videoId);
+
+      /* Related Videos */
+      fetchRelatedVideos(videoId, 8).then(function(videos) {
+        var container = document.getElementById('related-videos'); if (!container) return;
+        container.innerHTML = '';
+        if (!videos.length) { container.innerHTML='<p style="font-size:.85rem;color:var(--text-muted,inherit);">No related movies found.</p>'; return; }
+        videos.forEach(function(v){ container.appendChild(createWidgetVideoItem(v)); });
+        initLazyLoading();
+      });
+
+    }).catch(function(err) { console.error('Video fetch error:',err); showVideoNotFound(); });
+  }
+
+  /* ═══════════════════════════════════════════════════
+     OVERRIDDEN: renderVideoPlayer
+     ═══════════════════════════════════════════════════ */
+  function renderVideoPlayer(videoData) {
+    var wrapper = document.getElementById('video-player-wrapper');
+    var info = document.getElementById('video-info');
+    var notFound = document.getElementById('video-not-found');
+    if (!wrapper || !info) return;
+    if (notFound) notFound.style.display = 'none';
+
+    var videoUrl = getVideoUrl(videoData);
+    if (videoUrl) {
+      wrapper.innerHTML = '<video controls playsinline preload="metadata" class="main-video" src="'+videoUrl+'">Your browser does not support the video tag.</video>';
+    } else {
+      wrapper.innerHTML = '<div class="player-fallback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m10 8 5 4-5 4V8z"/></svg><p>Movie file not available</p></div>';
+    }
+
+    /* ── Premium Metadata ── */
+    var videoTitle = document.getElementById('video-title');
+    if (videoTitle) videoTitle.textContent = videoData.title || 'Untitled';
+
+    var metaYear = document.getElementById('info-year');
+    if (metaYear) { metaYear.textContent = videoData.year || ''; metaYear.parentElement.style.display = videoData.year ? '' : 'none'; }
+
+    var metaRated = document.getElementById('info-rated');
+    if (metaRated) {
+      var ratedVal = videoData.rated || videoData.contentRating || videoData.ageRating || '';
+      if (ratedVal) { metaRated.textContent = ratedVal; metaRated.style.background = getRatedColor(ratedVal); metaRated.style.display = ''; }
+      else { metaRated.style.display = 'none'; }
+    }
+
+    var metaRuntime = document.getElementById('info-runtime');
+    if (metaRuntime) {
+      var rtStr = formatRuntime(videoData.runtime || videoData.duration || videoData.length || '');
+      if (rtStr) { metaRuntime.innerHTML = '<i class="fas fa-clock"></i> '+escapeHTML(rtStr); metaRuntime.style.display = ''; }
+      else { metaRuntime.style.display = 'none'; }
+    }
+
+    var metaCountry = document.getElementById('info-country');
+    if (metaCountry) {
+      var cVal = videoData.country || '';
+      if (cVal) { metaCountry.innerHTML = '<i class="fas fa-globe"></i> '+escapeHTML(cVal); metaCountry.style.display = ''; }
+      else { metaCountry.style.display = 'none'; }
+    }
+
+    var genresContainer = document.getElementById('info-genres');
+    if (genresContainer) { genresContainer.innerHTML = createGenreChips(videoData.genre || ''); genresContainer.style.display = videoData.genre ? '' : 'none'; }
+
+    var imdbRating = document.getElementById('imdb-rating');
+    var imdbBox = document.querySelector('.info-imdb');
+    if (imdbRating && imdbBox) {
+      var rVal = videoData.imdbRating || videoData.rating || '';
+      if (rVal && !isNaN(parseFloat(rVal))) { imdbRating.textContent = parseFloat(rVal).toFixed(1); imdbBox.style.display = ''; }
+      else { imdbBox.style.display = 'none'; }
+    }
+
+    var directorEl = document.getElementById('info-director');
+    if (directorEl) {
+      var dVal = videoData.director || '';
+      if (dVal) { directorEl.innerHTML = '<i class="fas fa-film"></i> <span>'+escapeHTML(dVal)+'</span>'; directorEl.style.display = ''; }
+      else { directorEl.style.display = 'none'; }
+    }
+
+    var vjEl = document.getElementById('info-vj');
+    if (vjEl) {
+      var vjVal = videoData.vjName || videoData.vj || videoData.narrator || videoData.dubbedBy || '';
+      if (vjVal) { vjEl.innerHTML = '<i class="fas fa-microphone"></i> <span>'+escapeHTML(vjVal)+'</span>'; vjEl.style.display = ''; }
+      else { vjEl.style.display = 'none'; }
+    }
+
+    var descText = document.getElementById('desc-text');
+    if (descText) descText.textContent = videoData.description || 'No description available.';
+    setTimeout(initReadMore, 30);
+
+    var posterImg = document.getElementById('info-poster-img');
+    var posterFallback = document.querySelector('.poster-fallback');
+    var posterUrl = getPosterUrl(videoData);
+    if (posterImg && posterFallback) {
+      if (posterUrl) { posterImg.src = posterUrl; posterImg.alt = videoData.title||'Movie Poster'; posterImg.style.display=''; posterFallback.style.display='none'; }
+      else { posterImg.style.display='none'; posterFallback.style.display='flex'; }
+    }
+
+    /* ── Legacy selectors ── */
+    var videoViews = document.querySelector('#video-views span');
+    var videoDate = document.querySelector('#video-date span');
+    var likeCount = document.getElementById('like-count');
+    var dislikeCount = document.getElementById('dislike-count');
+    if (videoViews) videoViews.textContent = formatNumber(videoData.views||0)+' views';
+    if (videoDate) videoDate.textContent = formatDate(videoData.createdAt);
+    if (likeCount) likeCount.textContent = formatNumber(videoData.likes||0);
+    if (dislikeCount) dislikeCount.textContent = formatNumber(videoData.dislikes||0);
+
+    info.style.display = 'block';
+    document.title = (videoData.title||'Video')+' — Xstream';
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = (videoData.description||'').substring(0,160);
+  }
+
+  /* ═══ OVERRIDDEN: showVideoNotFound (unchanged logic) ═══ */
+  function showVideoNotFound() {
+    var wrapper = document.getElementById('video-player-wrapper');
+    var info = document.getElementById('video-info');
+    var notFound = document.getElementById('video-not-found');
+    if (wrapper) wrapper.style.display = 'none';
+    if (info) info.style.display = 'none';
+    if (notFound) notFound.style.display = 'block';
+  }
+  </script>
+
+  <script src="js/WT.js"></script>
+
+  <script>
+  /* =============================================
+   VIDEO PLAYER TRACKING INITIALIZATION
+   ============================================= */
+  (function() {
+    'use strict';
+    var VIDEO_ELEMENT_ID = 'videoPlayer';
+    var isTracking = false, isPaused = false, currentMovieId = null, currentUserId = null, currentTitle = '', positionInterval = null;
+
+    function getVideoPlayer(callback, retries) {
+      retries = retries || 0; var maxRetries = 20;
+      var player = document.getElementById(VIDEO_ELEMENT_ID);
+      if (!player) {
+        var fallbacks = ['video','#player','.video-player','video[controls]'];
+        for (var i=0;i<fallbacks.length;i++) { player=document.querySelector(fallbacks[i]); if(player) break; }
+      }
+      if (player) { callback(player); return; }
+      if (retries < maxRetries) setTimeout(function(){ getVideoPlayer(callback,retries+1); },250);
+      else console.error('[Tracker] Video player NOT found after',maxRetries,'retries.');
+    }
+
+    function getMovieInfo() {
+      var params = new URLSearchParams(window.location.search);
+      return { id:params.get('id')||params.get('movie')||params.get('episode')||'unknown', title:document.title||'Unknown Title' };
+    }
+
+    function getUserId() {
+      try { if(typeof auth!=='undefined'&&auth&&auth.currentUser) return auth.currentUser.uid; if(typeof AppState!=='undefined'&&AppState&&AppState.currentUser) return AppState.currentUser.uid; } catch(e){}
+      return null;
+    }
+
+    function startTracking(player) {
+      if (!player||isTracking) return;
+      currentMovieId=getMovieInfo().id; currentUserId=getUserId(); currentTitle=getMovieInfo().title;
+
+      player.addEventListener('loadedmetadata', function onMetaLoaded() {
+        if(typeof WatchTime!=='undefined'){ WatchTime.startWatching(currentMovieId,currentUserId,currentTitle,player.duration); isTracking=true; isPaused=false; }
+      });
+      if(player.readyState>=1&&player.duration>0){ if(typeof WatchTime!=='undefined'&&!isTracking){ WatchTime.startWatching(currentMovieId,currentUserId,currentTitle,player.duration); isTracking=true; } }
+
+      player.addEventListener('play', function() {
+        if(!isTracking){ if(typeof WatchTime!=='undefined'){ WatchTime.startWatching(currentMovieId,currentUserId,currentTitle,player.duration||0); isTracking=true; isPaused=false; } }
+        else if(isPaused){ if(typeof WatchTime!=='undefined'){ WatchTime.resumeWatching(); isPaused=false; } }
+      });
+      player.addEventListener('pause', function() { if(!isTracking||player.ended) return; if(typeof WatchTime!=='undefined'){ WatchTime.pauseWatching(); isPaused=true; } });
+      player.addEventListener('ended', function() { if(isTracking&&typeof WatchTime!=='undefined'){ WatchTime.completeMovie(currentMovieId,currentUserId); isTracking=false; isPaused=false; stopPositionUpdates(); } });
+      startPositionUpdates(player);
+    }
+
+    function startPositionUpdates(player) {
+      stopPositionUpdates();
+      positionInterval=setInterval(function(){ if(!player||!isTracking||isPaused||player.paused||player.ended) return; if(typeof WatchTime!=='undefined') WatchTime.updateWatchTime(currentMovieId,currentUserId,player.currentTime); },3000);
+    }
+    function stopPositionUpdates() { if(positionInterval){clearInterval(positionInterval);positionInterval=null;} }
+
+    window.addEventListener('beforeunload', function() {
+      stopPositionUpdates();
+      if(isTracking&&typeof WatchTime!=='undefined'){ var p=document.getElementById(VIDEO_ELEMENT_ID); if(p&&!p.ended&&!p.paused) WatchTime.stopWatching(currentMovieId,currentUserId); }
+    });
+
+    function watchForEpisodeChange() {
+      var lastId=currentMovieId;
+      setInterval(function(){ var n=getMovieInfo(); if(n.id!==lastId&&n.id!=='unknown'){ if(isTracking&&typeof WatchTime!=='undefined') WatchTime.stopWatching(currentMovieId,currentUserId); isTracking=false;isPaused=false;lastId=n.id;currentMovieId=n.id;currentTitle=n.title; getVideoPlayer(function(p){isTracking=false;startTracking(p);}); } },1000);
+    }
+
+    function init() {
+      if(typeof WatchTime==='undefined'){console.error('[Tracker] WT.js not loaded!');return;}
+      getVideoPlayer(function(p){startTracking(p);watchForEpisodeChange();});
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  })();
+  </script>
+
+  <!-- Ad System -->
+  <script src="js/ad.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof AdSystem !== 'undefined') {
+        AdSystem.init('ad-banner-top', { position:'all', maxAds:10 });
+        AdSystem.init('ad-banner-bottom', { position:'all', maxAds:10 });
+      }
+    });
+    document.addEventListener('profileReady', function() {
+      if (typeof AdSystem !== 'undefined') {
+        AdSystem.init('ad-banner-top', { position:'all', maxAds:10 });
+        AdSystem.init('ad-banner-bottom', { position:'all', maxAds:10 });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Sign in to your xStream Movies account.">
+  <title>Sign In — XSTREAM MOVIES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* =============================================
+       xStreamFilms — Netflix-Exact Login Override
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Kill original chrome */
+    body[data-page="login"] #main-nav,
+    body[data-page="login"] #main-footer { display: none !important; }
+    body[data-page="login"] .auth-bg-shapes { display: none !important; }
+
+    body[data-page="login"] {
+      background: #000 !important;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+      color: #fff !important;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       BACKGROUND — Movie Poster Grid
+       ============================================= */
+    .xs-login-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+ /* Replace your existing .xs-lbg-image with this */
+.xs-lbg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* Update the overlay to only cover the image area */
+body[data-page="login"] .xs-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Add a fade at the bottom of the image into black */
+body[data-page="login"] .xs-login-bg::after {
+  content: '';
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  height: 25%;
+  background: linear-gradient(to bottom, transparent, #000);
+  z-index: 1;
+  pointer-events: none;
+}
+
+    .xs-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    /* =============================================
+       PAGE — Centered Layout
+       ============================================= */
+    body[data-page="login"] .auth-page {
+      position: relative !important;
+      z-index: 2 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 100vh !important;
+      padding: 80px 20px !important;
+      margin: 0 !important;
+      background: none !important;
+    }
+
+    body[data-page="login"] .auth-container {
+      width: 100% !important;
+      max-width: 450px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* =============================================
+       CARD — Netflix Transparent Dark Box
+       ============================================= */
+    body[data-page="login"] .auth-card {
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+      border-radius: 4px !important;
+      box-shadow: none !important;
+      padding: 60px 68px 40px !important;
+      overflow: visible !important;
+      display: flex !important;
+      flex-direction: column !important;
+      animation: xsCardIn 0.5s ease-out both;
+    }
+
+    @keyframes xsCardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hide original header & divider */
+    body[data-page="login"] .auth-header { display: none !important; }
+    body[data-page="login"] .auth-divider { display: none !important; }
+
+    /* =============================================
+       "Sign In" HEADING
+       ============================================= */
+    .xs-nf-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 28px;
+      order: 0;
+      animation: xsTitleIn 0.4s ease-out 0.1s both;
+    }
+
+    @keyframes xsTitleIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =============================================
+       FORM
+       ============================================= */
+    body[data-page="login"] .auth-form {
+      padding: 0 !important;
+      margin: 0 !important;
+      gap: 0 !important;
+      display: block !important;
+      order: 1;
+    }
+
+    body[data-page="login"] .form-group { margin-bottom: 0 !important; }
+
+    /* Hide labels */
+    body[data-page="login"] .form-group label { display: none !important; }
+
+    /* Hide input icons */
+    body[data-page="login"] .input-icon { display: none !important; }
+
+    /* Hide toggle password */
+    body[data-page="login"] .toggle-password { display: none !important; }
+
+    /* Hide error spans (show orange border instead) */
+    body[data-page="login"] .form-error { display: none !important; }
+
+    /* Input wrapper — just pass through */
+    body[data-page="login"] .input-wrapper { display: block !important; }
+
+    /* =============================================
+       NETFLIX-EXACT INPUTS
+       ============================================= */
+    body[data-page="login"] .input-wrapper input {
+      display: block !important;
+      width: 100% !important;
+      height: 50px !important;
+      background: #333 !important;
+      border: none !important;
+      border-radius: 4px !important;
+      padding: 24px 16px 8px !important;
+      color: #fff !important;
+      font-size: 16px !important;
+      font-family: inherit !important;
+      outline: none !important;
+      transition: background 0.15s ease !important;
+      margin-bottom: 16px !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+    }
+
+    body[data-page="login"] .input-wrapper input::placeholder {
+      color: #8c8c8c !important;
+      font-size: 16px !important;
+    }
+
+    body[data-page="login"] .input-wrapper input:focus {
+      background: #454545 !important;
+    }
+
+    /* Orange error border (Netflix style) */
+    body[data-page="login"] .input-wrapper input.xs-input-error {
+      border-bottom: 2px solid #e87c03 !important;
+    }
+
+    /* =============================================
+       FORM ROW — Remember Me + Need Help?
+       ============================================= */
+    body[data-page="login"] .form-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      margin-bottom: 24px !important;
+      margin-top: 4px !important;
+    }
+
+    /* Remember me */
+    body[data-page="login"] .checkbox-label {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-size: 13px !important;
+      color: #8c8c8c !important;
+      cursor: pointer !important;
+      margin-bottom: 0 !important;
+      padding: 0 !important;
+      user-select: none !important;
+    }
+
+    body[data-page="login"] .checkbox-label input[type="checkbox"] {
+      width: 16px !important;
+      height: 16px !important;
+      accent-color: #fff !important;
+      cursor: pointer !important;
+      flex-shrink: 0 !important;
+      display: inline-block !important;
+      position: static !important;
+      opacity: 1 !important;
+    }
+
+    body[data-page="login"] .checkmark { display: none !important; }
+
+    /* Need help? */
+    body[data-page="login"] #forgot-password-btn {
+      background: none !important;
+      border: none !important;
+      color: #8c8c8c !important;
+      font-size: 13px !important;
+      font-family: inherit !important;
+      cursor: pointer !important;
+      padding: 0 !important;
+      text-decoration: none !important;
+      transition: color 0.15s !important;
+    }
+
+    body[data-page="login"] #forgot-password-btn:hover {
+      color: #b3b3b3 !important;
+      text-decoration: underline !important;
+    }
+
+    /* =============================================
+       SIGN IN BUTTON — Netflix Red
+       ============================================= */
+    body[data-page="login"] #login-submit {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 50px !important;
+      background: #e50914 !important;
+      border: none !important;
+      border-radius: 4px !important;
+      color: #fff !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      font-family: inherit !important;
+      cursor: pointer !important;
+      transition: background 0.15s ease !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      letter-spacing: normal !important;
+    }
+
+    body[data-page="login"] #login-submit:hover { background: #f40612 !important; }
+    body[data-page="login"] #login-submit:active { background: #c40010 !important; }
+
+    body[data-page="login"] #login-submit .btn-text {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+
+    body[data-page="login"] #login-submit .btn-spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: xsSpin 0.6s linear infinite;
+    }
+
+    @keyframes xsSpin { to { transform: rotate(360deg); } }
+
+    /* =============================================
+       SEPARATOR LINE
+       ============================================= */
+    .xs-nf-sep {
+      height: 1px;
+      background: #8c8c8c;
+      margin: 24px 0;
+      order: 2;
+    }
+
+    /* =============================================
+       GOOGLE BUTTON — Netflix Outlined
+       ============================================= */
+    body[data-page="login"] #google-login-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 10px !important;
+      width: 100% !important;
+      height: 50px !important;
+      background: transparent !important;
+      border: 1px solid #8c8c8c !important;
+      border-radius: 4px !important;
+      color: #fff !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      font-family: inherit !important;
+      cursor: pointer !important;
+      transition: background 0.15s ease, border-color 0.15s ease !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      order: 3;
+    }
+
+    body[data-page="login"] #google-login-btn:hover {
+      background: rgba(255,255,255,0.05) !important;
+      border-color: #b3b3b3 !important;
+    }
+
+    body[data-page="login"] #google-login-btn:active {
+      background: rgba(255,255,255,0.08) !important;
+    }
+
+    /* =============================================
+       FOOTER — "New to xStream? Sign up now"
+       ============================================= */
+    body[data-page="login"] .auth-footer {
+      text-align: center !important;
+      padding: 24px 0 0 !important;
+      font-size: 14px !important;
+      color: #8c8c8c !important;
+      order: 4;
+    }
+
+    body[data-page="login"] .auth-footer a {
+      color: #fff !important;
+      text-decoration: none !important;
+      font-weight: 400 !important;
+      transition: text-decoration 0.15s !important;
+    }
+
+    body[data-page="login"] .auth-footer a:hover {
+      text-decoration: underline !important;
+    }
+
+    /* =============================================
+       reCAPTCHA TEXT
+       ============================================= */
+    .xs-nf-recaptcha {
+      margin-top: 28px;
+      font-size: 11px;
+      color: #8c8c8c;
+      line-height: 1.6;
+      order: 5;
+    }
+
+    .xs-nf-recaptcha a {
+      color: #0071eb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .xs-nf-recaptcha a:hover { color: #1a82ff; }
+
+    /* =============================================
+       FORGOT PASSWORD MODAL — Dark Netflix Style
+       ============================================= */
+    body[data-page="login"] #forgot-modal {
+      background: rgba(0, 0, 0, 0.7) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+      z-index: 9999 !important;
+    }
+
+    body[data-page="login"] #forgot-modal .modal {
+      background: rgba(0, 0, 0, 0.85) !important;
+      border: none !important;
+      border-radius: 4px !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
+      max-width: 450px !important;
+      width: 90% !important;
+      padding: 40px !important;
+    }
+
+    body[data-page="login"] #forgot-modal .modal-header {
+      margin-bottom: 20px !important;
+    }
+
+    body[data-page="login"] #forgot-modal .modal-header h3 {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: #fff !important;
+      font-family: inherit !important;
+    }
+
+    body[data-page="login"] #forgot-modal .modal-close {
+      color: #8c8c8c !important;
+      font-size: 28px !important;
+      background: none !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: color 0.15s !important;
+      line-height: 1 !important;
+      padding: 0 !important;
+    }
+
+    body[data-page="login"] #forgot-modal .modal-close:hover { color: #fff !important; }
+
+    body[data-page="login"] #forgot-modal .modal-body p {
+      font-size: 14px !important;
+      color: #8c8c8c !important;
+      margin-bottom: 20px !important;
+      line-height: 1.5 !important;
+    }
+
+    body[data-page="login"] #forgot-modal .form-group label { display: none !important; }
+    body[data-page="login"] #forgot-modal .form-error { display: none !important; }
+
+    body[data-page="login"] #forgot-modal input.input {
+      display: block !important;
+      width: 100% !important;
+      height: 50px !important;
+      background: #333 !important;
+      border: none !important;
+      border-radius: 4px !important;
+      padding: 24px 16px 8px !important;
+      color: #fff !important;
+      font-size: 16px !important;
+      font-family: inherit !important;
+      outline: none !important;
+      margin-bottom: 16px !important;
+    }
+
+    body[data-page="login"] #forgot-modal input.input::placeholder { color: #8c8c8c !important; }
+    body[data-page="login"] #forgot-modal input.input:focus { background: #454545 !important; }
+    body[data-page="login"] #forgot-modal input.input.xs-input-error { border-bottom: 2px solid #e87c03 !important; }
+
+    body[data-page="login"] #forgot-submit {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 50px !important;
+      background: #e50914 !important;
+      border: none !important;
+      border-radius: 4px !important;
+      color: #fff !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      font-family: inherit !important;
+      cursor: pointer !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+
+    body[data-page="login"] #forgot-submit:hover { background: #f40612 !important; }
+
+    body[data-page="login"] #forgot-submit .btn-spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: xsSpin 0.6s linear infinite;
+    }
+
+    /* =============================================
+       ANIMATIONS
+       ============================================= */
+    .xs-login-bg { animation: xsBgIn 0.8s ease-out both; }
+
+    @keyframes xsBgIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* =============================================
+       RESPONSIVE — Tablet
+       ============================================= */
+    @media (max-width: 740px) {
+      body[data-page="login"] .auth-card {
+        padding: 48px 32px 32px !important;
+      }
+
+      .xs-nf-title {
+        font-size: 28px;
+        margin-bottom: 22px;
+      }
+    }
+
+    /* =============================================
+       RESPONSIVE — Mobile
+       ============================================= */
+    @media (max-width: 500px) {
+      body[data-page="login"] .auth-card {
+        padding: 40px 24px 28px !important;
+        border-radius: 0 !important;
+      }
+
+      .xs-nf-title {
+        font-size: 24px;
+        margin-bottom: 18px;
+      }
+
+      .xs-bg-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+      }
+
+      .xs-bg-grid img:nth-child(n+10) { display: none; }
+
+      body[data-page="login"] .input-wrapper input {
+        height: 48px !important;
+        font-size: 16px !important;
+        margin-bottom: 14px !important;
+      }
+
+      body[data-page="login"] #login-submit { height: 48px !important; }
+      body[data-page="login"] #google-login-btn { height: 48px !important; }
+
+      .xs-nf-recaptcha { font-size: 10px; margin-top: 20px; }
+
+      body[data-page="login"] #forgot-modal .modal {
+        padding: 32px 24px !important;
+        width: 95% !important;
+      }
+
+      @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        body[data-page="login"] .auth-page {
+          padding-bottom: calc(40px + env(safe-area-inset-bottom)) !important;
+        }
+      }
+    }
+
+    @media (max-width: 360px) {
+      body[data-page="login"] .auth-card {
+        padding: 32px 18px 24px !important;
+      }
+    }
+
+    /* =============================================
+       ACCESSIBILITY
+       ============================================= */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body[data-page="login"] .input-wrapper input:focus-visible,
+    body[data-page="login"] #login-submit:focus-visible,
+    body[data-page="login"] #google-login-btn:focus-visible,
+    body[data-page="login"] #forgot-password-btn:focus-visible {
+      outline: 2px solid #0071eb;
+      outline-offset: 2px;
+    }
+
+    .xs-nf-recaptcha a:focus-visible,
+    body[data-page="login"] .auth-footer a:focus-visible {
+      outline: 2px solid #0071eb;
+      outline-offset: 2px;
+    }
+
+    @media (forced-colors: active) {
+      body[data-page="login"] .input-wrapper input { border: 2px solid CanvasText !important; }
+      body[data-page="login"] #login-submit { border: 2px solid CanvasText !important; }
+      body[data-page="login"] #google-login-btn { border: 2px solid CanvasText !important; }
+    }
+  </style>
+</head>
+<body data-page="login">
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <nav id="main-nav" class="navbar" aria-label="Main navigation"></nav>
+
+  <!-- Background: Single Image -->
+<div class="xs-login-bg" aria-hidden="true">
+  <div class="xs-lbg-image" style="background-image: url('https://ik.imagekit.io/s95tumxuk/IMG_3747.jpeg?updatedAt=1783871145675');"></div>
+  <div class="xs-bg-overlay"></div>
+</div>
+
+  <main class="auth-page" role="main">
+    <div class="auth-bg-shapes" aria-hidden="true" style="display:none;">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-card">
+
+        <!-- Netflix-style heading -->
+        <h1 class="xs-nf-title">Sign In</h1>
+
+        <!-- Original header (hidden by CSS) -->
+        <div class="auth-header">
+          <a href="homepage.html" class="auth-logo">
+            <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#e63946"/><path d="M13 10l10 6-10 6V10z" fill="#fff"/></svg>
+            xStream Movies
+          </a>
+          <h1>Welcome Back</h1>
+          <p>Sign in to your account to continue</p>
+        </div>
+
+        <!-- Google Sign In (visually moved after form via CSS order) -->
+        <button type="button" class="btn-google" id="google-login-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign in with Google
+        </button>
+
+        <!-- Original divider (hidden by CSS) -->
+        <div class="auth-divider">
+          <span>or continue with email</span>
+        </div>
+
+        <form id="login-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="login-email">Email Address <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <input type="email" id="login-email" placeholder="Email or phone number" required autocomplete="email">
+            </div>
+            <span class="form-error" id="login-email-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+              <button type="button" class="toggle-password" data-target="login-password" style="display:none" aria-hidden="true">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <span class="form-error" id="login-password-error"></span>
+          </div>
+
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember-me" checked>
+              <span class="checkmark"></span>
+              Remember me
+            </label>
+            <button type="button" id="forgot-password-btn" class="link-btn">Need help?</button>
+          </div>
+
+          <button type="submit" class="btn-accent btn-full btn-lg" id="login-submit">
+            <span class="btn-text">Sign In</span>
+            <div class="btn-spinner" style="display:none;"></div>
+          </button>
+        </form>
+
+        <!-- Netflix-style separator -->
+        <div class="xs-nf-sep"></div>
+
+        <!-- Footer -->
+        <div class="auth-footer">
+          <p>New to xStream? <a href="signup.html">Sign up now</a></p>
+        </div>
+
+        <!-- reCAPTCHA text -->
+        <div class="xs-nf-recaptcha">
+          This page is protected by Google reCAPTCHA to ensure you're not a bot. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more.</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Reset Password</h3>
+        <button class="modal-close" id="close-forgot-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Enter your email address and we'll send you a link to reset your password.</p>
+        <form id="forgot-form" novalidate>
+          <div class="form-group">
+            <label for="forgot-email">Email Address <span class="required">*</span></label>
+            <input type="email" id="forgot-email" placeholder="Email address" class="input" required autocomplete="email">
+            <span class="form-error" id="forgot-email-error"></span>
+          </div>
+          <button type="submit" class="btn-accent btn-full" id="forgot-submit">
+            <span class="btn-text">Send Reset Link</span>
+            <div class="btn-spinner" style="display:none;"></div>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer id="main-footer" class="footer"></footer>
+
+  <!-- ==========================================
+       SCRIPTS - PERFECT LOAD ORDER
+       ========================================== -->
+  
+  <!-- 1. Firebase SDKs (MUST load first) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  
+  <!-- 2. Duplicate-app guard -->
+  <script>
+    (function () {
+      var _orig = firebase.initializeApp;
+      firebase.initializeApp = function (opts, name) {
+        try { return _orig.call(firebase, opts, name); } 
+        catch (e) {
+          if (e.code === 'app/duplicate-app') return firebase.app(name);
+          throw e;
+        }
+      };
+    })();
+  </script>
+  
+  <!-- 3. EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <!-- 4. Security & App Scripts -->
+  <script src="js/threat.js"></script>
+  <script src="config.js"></script>
+  
+  <!-- 5. KILL OLD LOGIN LOGIC (Prevents app.js from crashing the page) -->
+  <script>
+    function initLoginPage() { return false; }
+  </script>
+
+  <script src="js/app.js"></script>
+  <script src="js/FP.js"></script>
+
+   <!-- ==========================================
+       PAGE LOGIC (Inline)
+       ========================================== -->
+  <!-- ==========================================
+       PAGE LOGIC (Inline)
+       ========================================== -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // Initialize Forgot Password safely
+    try {
+      if (typeof ForgotPassword !== 'undefined') {
+        ForgotPassword.init({ debug: true });
+      }
+    } catch(e) {
+      console.warn('ForgotPassword init skipped:', e);
+    }
+
+    // ============================================
+    // CASHA CLEANER — Uses correct Casha API method
+    // ============================================
+    function clearCashaCache() {
+      try {
+        if (typeof Casha !== 'undefined' && typeof Casha.clearAllCache === 'function') {
+          Casha.clearAllCache();
+        }
+        // Fallback: scrub any Casha keys in localStorage directly
+        var keysToRemove = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var key = localStorage.key(i);
+          if (key && key.indexOf('casha_') === 0) {
+            keysToRemove.push(key);
+          }
+        }
+        for (var j = 0; j < keysToRemove.length; j++) {
+          localStorage.removeItem(keysToRemove[j]);
+        }
+      } catch (e) {}
+    }
+
+    // ============================================
+    // LOGIN FORM HANDLING
+    // ============================================
+    var loginForm = document.getElementById('login-form');
+    var loginEmail = document.getElementById('login-email');
+    var loginPassword = document.getElementById('login-password');
+    var loginSubmit = document.getElementById('login-submit');
+
+    function showFieldError(fieldId, message) {
+      var errorEl = document.getElementById(fieldId + '-error');
+      var field = document.getElementById(fieldId);
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+      if (field) field.classList.add('input-error');
+    }
+
+    function clearFieldErrors(prefix) {
+      document.querySelectorAll('[id^="' + prefix + '"][id$="-error"]').forEach(function(el) {
+        el.textContent = '';
+        el.style.display = 'none';
+      });
+      document.querySelectorAll('.input-error').forEach(function(el) {
+        el.classList.remove('input-error');
+      });
+    }
+
+    function setLoginLoading(isLoading) {
+      if (loginSubmit) {
+        var btnText = loginSubmit.querySelector('.btn-text');
+        var btnSpinner = loginSubmit.querySelector('.btn-spinner');
+        loginSubmit.disabled = isLoading;
+        if (btnText) btnText.style.display = isLoading ? 'none' : 'inline';
+        if (btnSpinner) btnSpinner.style.display = isLoading ? 'block' : 'none';
+      }
+    }
+
+    // Email/Password Login
+    if (loginForm) {
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearFieldErrors('login');
+
+        var email = loginEmail.value.trim();
+        var password = loginPassword.value;
+        var hasError = false;
+
+        if (!email) {
+          showFieldError('login-email', 'Email is required');
+          hasError = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showFieldError('login-email', 'Please enter a valid email address');
+          hasError = true;
+        }
+
+        if (!password) {
+          showFieldError('login-password', 'Password is required');
+          hasError = true;
+        } else if (password.length < 6) {
+          showFieldError('login-password', 'Password must be at least 6 characters');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        setLoginLoading(true);
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(function(userCredential) {
+            setLoginLoading(false);
+            if (userCredential.user && !userCredential.user.emailVerified) {
+              showToast('Please verify your email before signing in.', 'warning');
+              firebase.auth().signOut();
+              return;
+            }
+            showToast('Welcome back!', 'success');
+            clearCashaCache();
+            setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+          })
+          .catch(function(error) {
+            setLoginLoading(false);
+            switch (error.code) {
+              case 'auth/user-not-found': showFieldError('login-email', 'No account found with this email'); break;
+              case 'auth/wrong-password':
+              case 'auth/invalid-credential': showFieldError('login-password', 'Incorrect password'); break;
+              case 'auth/too-many-requests': showToast('Too many failed attempts. Please try again later.', 'error'); break;
+              case 'auth/user-disabled': showToast('This account has been disabled.', 'error'); break;
+              case 'auth/invalid-email': showFieldError('login-email', 'Invalid email address'); break;
+              default: showToast('Login failed. Please try again.', 'error');
+            }
+          });
+      });
+    }
+
+    // Toggle Password Visibility
+    document.querySelectorAll('.toggle-password').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var targetId = this.getAttribute('data-target');
+        var input = document.getElementById(targetId);
+        var eyeOpen = this.querySelector('.eye-open');
+        var eyeClosed = this.querySelector('.eye-closed');
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (eyeOpen) eyeOpen.style.display = 'none';
+          if (eyeClosed) eyeClosed.style.display = 'block';
+        } else {
+          input.type = 'password';
+          if (eyeOpen) eyeOpen.style.display = 'block';
+          if (eyeClosed) eyeClosed.style.display = 'none';
+        }
+      });
+    });
+
+    // ============================================
+    // GOOGLE REDIRECT LOGIN — UID-based Storage
+    // ============================================
+    
+    firebase.auth().getRedirectResult().then(function(result) {
+      if (result.user) {
+        var user = result.user;
+        var uid = user.uid;
+        
+        return firebase.database().ref('userAccounts/' + uid).once('value').then(function(snap) {
+          if (!snap.exists()) {
+            return firebase.database().ref('userAccounts/' + uid).set({
+              fullName: user.displayName || 'User',
+              email: user.email,
+              createdAt: Date.now(),
+              uid: uid,
+              emailVerified: true
+            });
+          }
+        }).then(function() {
+          showToast('Welcome back!', 'success');
+          clearCashaCache();
+          setTimeout(function() { window.location.href = 'homepage.html'; }, 1000);
+        });
+      }
+    }).catch(function(err) {
+      if (err.code === 'auth/redirect-cancelled-by-user') return;
+      console.error('Google Auth Error:', err);
+      showToast('Google sign-in failed.', 'error');
+    });
+
+    var googleBtn = document.getElementById('google-login-btn');
+    if (googleBtn) {
+      googleBtn.addEventListener('click', function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      });
+    }
+
+    // Auth State Observer
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user && user.emailVerified) {
+        if (window.location.pathname.includes('login')) {
+          clearCashaCache();
+          window.location.href = 'homepage.html';
+        }
+      }
+    });
+  });
+  </script>
+</body>
+</html>

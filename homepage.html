@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+ 
+
+<meta name="description" content="╳
+XSTREAM ⫸ WATCH PREMIUM ⫸ TV SERIES ⫸ TRANSLATED ⫸ MOVIES WORLDWIDE">
+<meta name="keywords" content="movies, streaming,Action, Horror,comedy,Adventure,Animations">
+<meta name="author" content="xstream movies">
+
+<meta property="og:title" content="xstream movies">
+<meta property="og:description" content="Discover trending movies  worldwide.">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+ <link rel="icon" type="image/webp" sizes="16x16" href="https://ik.imagekit.io/s95tumxuk/IMG_2611.png">
+ <link rel="icon" type="image/webp" sizes="32x32" href="https://ik.imagekit.io/s95tumxuk/IMG_2611.png">
+ <link rel="apple-touch-icon" sizes="180x180" href="https://ik.imagekit.io/s95tumxuk/IMG_2610.png">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>XSTRΞAM ⫸WATCH THE WORLD'S BEST MOVIES & SERIES
+TRANSLATED • SUBTITLED • ORIGINAL LANGUAGE
+UNLIMITED ENTERTAINMENT ON XSTREAM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/hero.css">
+</head>
+<body data-page="home">
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Navigation -->
+  <nav id="main-nav" class="navbar"></nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-overlay" class="mobile-overlay"></div>
+  <div id="mobile-menu" class="mobile-menu"></div>
+
+<!-- Hero Section — XSTREAM FILMS -->
+<section class="hero" id="hero">
+  <div data-mock-section="hero"></div>
+  <!-- Backdrop Layer -->
+  <div class="hero-backdrop">
+    <img class="hero-backdrop-img" id="backdrop-a" src="" alt="">
+    <img class="hero-backdrop-img" id="backdrop-b" src="" alt="">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Content Layer -->
+  <div class="hero-container">
+
+    <!-- Main Hero Content -->
+    <div class="hero-main">
+      <div class="hero-main-left">
+        <div class="hero-content-transition" id="hero-content">
+          <span class="hero-label hero-anim">XSTREAM MOVIES PREMIUM</span>
+          <h1 class="hero-movie-title hero-anim" id="hero-title"></h1>
+          <div class="hero-meta hero-anim" id="hero-meta"></div>
+          <div class="hero-director hero-anim" id="hero-director"></div>
+          <p class="hero-description hero-anim" id="hero-description"></p>
+          <div class="hero-actions hero-anim" id="hero-actions">
+            <a href="#" class="btn-hero-watch" id="btn-watch">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><polygon points="6,3 20,12 6,21"/></svg>
+              Watch Now
+            </a>
+            <a href="#" class="btn-hero-trailer" id="btn-trailer">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+              </svg>
+              Watch Trailer
+            </a>
+            <button class="btn-hero-watchlist" id="btn-watchlist" aria-label="Add to watchlist">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-main-right"></div>
+    </div>
+
+    <!-- Bottom Info Panel -->
+    <div class="hero-info-panel hero-anim" id="hero-info-panel">
+      <div class="hero-info-column">
+        <span class="hero-info-icon">⭐</span>
+        <span class="hero-info-value" id="info-rating"></span>
+        <span class="hero-info-label">IMDb Rating</span>
+      </div>
+      <div class="hero-info-column">
+        <span class="hero-info-icon">📅</span>
+        <span class="hero-info-value" id="info-date"></span>
+        <span class="hero-info-label">Release Date</span>
+      </div>
+      <div class="hero-info-column">
+        <span class="hero-info-icon">🎬</span>
+        <span class="hero-info-value" id="info-director"></span>
+        <span class="hero-info-label">Director</span>
+      </div>
+      <div class="hero-info-column">
+        <span class="hero-info-icon" id="info-quality-icon">HD</span>
+        <span class="hero-info-value" id="info-quality"></span>
+        <span class="hero-info-label">Quality</span>
+      </div>
+    </div>
+
+    <!-- Slider Dots -->
+    <div class="hero-dots hero-anim" id="hero-dots"></div>
+
+  </div>
+</section>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <div class="content-grid">
+      <!-- Main Column -->
+      <div class="content-main">
+  <!-- Categories Widget -->
+<div class="widget">
+  <h3 class="widget-title">Categories</h3>
+  <div class="category-scroll-wrapper" id="sidebar-categories">
+    <!-- Left arrow -->
+    <button class="scroll-arrow scroll-arrow-left" id="cat-scroll-left" aria-label="Scroll left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+ 
+  <!-- Scrollable track -->
+  <div class="category-track" id="cat-track">
+    <button class="category-pill active" data-category="all">All Movies</button>
+    <button class="category-pill" data-category="documentary">Documentary</button>
+    <button class="category-pill" data-category="action">Action</button>
+    <button class="category-pill" data-category="adventure">Adventure</button>
+    <button class="category-pill" data-category="animation">Animation</button>
+    <button class="category-pill" data-category="comedy">Comedy</button>
+    <button class="category-pill" data-category="crime">Crime</button>
+    <button class="category-pill" data-category="drama">Drama</button>
+    <button class="category-pill" data-category="Sciencefiction">Sci-Fiction</button>
+    <button class="category-pill" data-category="family">Family</button>
+    <button class="category-pill" data-category="horror">Horror</button>
+  </div>
+  
+  <!-- Right arrow -->
+  <button class="scroll-arrow scroll-arrow-right" id="cat-scroll-right" aria-label="Scroll right">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+  </div>
+  </div>
+
+ 
+<!-- Popular Videos Widget -->
+<div class="widget popular-widget">
+  <div data-mock-section="popular" class="movie-grid"></div>
+  <h3 class="widget-title">Popular Movies</h3>
+  <div class="popular-scroll-wrapper">
+    <button class="scroll-arrow scroll-arrow-left" id="popular-scroll-left" aria-label="Scroll left">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <div class="popular-track" id="popular-track">
+      <div id="popular-videos-widget" class="popular-slide-list">
+        <div class="popular-card skeleton-popular-card"><div class="skeleton skeleton-popular-thumb"></div></div>
+        <div class="popular-card skeleton-popular-card"><div class="skeleton skeleton-popular-thumb"></div></div>
+        <div class="popular-card skeleton-popular-card"><div class="skeleton skeleton-popular-thumb"></div></div>
+        <div class="popular-card skeleton-popular-card"><div class="skeleton skeleton-popular-thumb"></div></div>
+      </div>
+    </div>
+    <button class="scroll-arrow scroll-arrow-right" id="popular-scroll-right" aria-label="Scroll right">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- Years Widget -->
+<div class="widget">
+  <h3 class="widget-title">Browse by Year</h3>
+  <div class="year-scroll-wrapper" id="year-cloud">
+    <!-- Left arrow -->
+    <button class="scroll-arrow scroll-arrow-left" id="year-scroll-left" aria-label="Scroll left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    <!-- Scrollable track — pills injected by JS -->
+    <div class="year-track" id="year-track">
+      <span style="color:var(--text-muted); font-size:0.8rem;">Loading...</span>
+    </div>
+    
+    <!-- Right arrow -->
+    <button class="scroll-arrow scroll-arrow-right" id="year-scroll-right" aria-label="Scroll right">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+  <!-- Filter Bar -->
+<div class="filter-bar" id="filter-bar">
+  <div class="filter-left">
+    <h2 class="section-title" id="recent-title">
+      <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Recent Movie Uploads //
+    </h2>
+   
+    </a>
+  </div>
+  <div class="filter-right">
+  <select id="category-filter" class="filter-select">
+    
+    <option value="all">All Categories</option>
+    <option value="action">Action</option>
+    <option value="adventure">Adventure</option>
+    <option value="animation">Animation</option>
+    <option value="comedy">Comedy</option>
+    <option value="crime">Crime</option>
+    <option value="drama">Drama</option>
+    <option value="family">Family</option>
+    <option value="horror">Horror</option>
+    <option value="Sciencefiction">Science Fiction</option>
+    <option value="thriller">Thriller</option>
+    <option value="romance">Romance</option>
+    <option value="fantasy">Fantasy</option>
+    <option value="mystery">Mystery</option>
+    <option value="scifi">Sci-Fi</option>
+    <option value="war">War</option>
+    <option value="western">Western</option>
+    <option value="musical">Musical</option>
+    <option value="sport">Sport</option>
+    <option value="historical">Historical</option>
+    <option value="biography">Biography</option>
+    <option value="noir">Film Noir</option>
+    <option value="psychological">Psychological</option>
+    <option value="slasher">Slasher</option>
+    <option value="supernatural">Supernatural</option>
+    <option value="survival">Survival</option>
+    <option value="martialarts">Martial Arts</option>
+    <option value="disaster">Disaster</option>
+    <option value="mockumentary">Mockumentary</option>
+    <option value="indie">Indie</option>
+    <option value="darkcomedy">Dark Comedy</option>
+    <option value="comingofage">Coming of Age</option>
+    <option value="dystopian">Dystopian</option>
+    <option value="postapocalyptic">Post-Apocalyptic</option>
+    <option value="spy">Spy / Espionage</option>
+    <option value="heist">Heist</option>
+    <option value="legal">Legal</option>
+    <option value="political">Political</option>
+    <option value="religious">Religious</option>
+    <option value="anime">Anime</option>
+    <option value="shortfilm">Short Film</option>
+    <option value="documentary">Documentary</option>
+  </select>
+
+  <!-- Hidden panel that slides open -->
+  
+  <div class="more-categories-panel" id="more-categories-panel">
+    <div class="more-categories-panel-header">
+      <span>Browse by Category</span>
+      <button class="more-categories-close" id="more-categories-close">&times;</button>
+    </div>
+    <div class="category-scroll-track" id="category-scroll-track">
+      <div class="category-scroll-loading">
+        <div class="skeleton skeleton-text" style="width:120px;height:32px;"></div>
+        <div class="skeleton skeleton-text" style="width:90px;height:32px;"></div>
+        <div class="skeleton skeleton-text" style="width:140px;height:32px;"></div>
+        <div class="skeleton skeleton-text" style="width:100px;height:32px;"></div>
+        <div class="skeleton skeleton-text" style="width:110px;height:32px;"></div>
+      </div>
+    </div>
+  </div>
+  <select id="sort-filter" class="filter-select">
+    <option value="recent">Most Recent</option>
+    <option value="views">Most Viewed</option>
+    <option value="likes">Most Liked</option>
+  </select>
+   <a href="viewall.html" class="btn-more-categories" id="btn-more-categories">
+  View All
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+</a>
+</div>
+</div>
+
+
+        <!-- Recent Videos Grid -->
+        <section class="section">
+          <div class="video-grid" id="videos-grid">
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+          </div>
+          <div id="load-more-container" class="load-more-container" style="display:none;">
+        
+            <div id="load-more-spinner" class="spinner" style="display:none;"></div>
+          </div>
+          <div id="no-videos" class="empty-state" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m10 8 5 4-5 4V8z"/></svg>
+            <h3>No movies found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+          </div>
+        </section>
+      </div>
+
+        <!-- Trending Section -->
+        <section class="section" id="trending-section">
+          <div data-mock-section="trending" class="movie-grid"></div>
+          <div id="trending-movies"></div>
+          <div class="section-header">
+            <h2 class="section-title">
+              <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Trending New Movies//
+            </h2>
+           <a href="viewall.html?sort=trending" class="section-link">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div class="video-grid trending-grid" id="trending-grid">
+            <!-- Skeleton loaders -->
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+          </div>
+        </section>
+        
+        <!-- Series Section -->
+<section class="section" id="series-section">
+  <div class="section-header">
+    <h2 class="section-title">
+      <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
+        <polyline points="17 2 12 7 7 2"/>
+      </svg>
+      Trending Series //
+    </h2>
+    <a href="series.html" class="section-link">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></a>
+  </div>
+
+  <!-- Series Grid: 6 cards, 3 per row -->
+  <div class="video-grid series-grid" id="series-grid">
+    <!-- Skeleton loaders (replaced by JS) -->
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-thumb"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+  </div>
+
+  <!-- Auto-rotation progress bar & controls -->
+  <div class="series-rotation-bar" id="series-rotation-bar">
+    <div class="series-progress-track">
+      <div class="series-progress-fill" id="series-progress-fill"></div>
+    </div>
+    <div class="series-rotation-controls">
+      <button class="series-rotation-btn" id="series-pause-btn" title="Pause rotation">
+        <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="series-rotation-btn" id="series-shuffle-btn" title="Shuffle now">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+      </button>
+     
+    </div>
+  </div>
+</section>
+ </div>
+ </aside>
+ </div>
+ </main>
+
+ <!-- Footer -->
+ <footer id="main-footer" class="footer"></footer>
+
+
+<!-- 1. Firebase SDKs (MUST BE FIRST) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<!-- Offline Manager (load after main app.js) -->
+<script src="js/offline-manager.js"></script>
+
+<!-- Register Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js').catch(function(err) {
+        console.warn('SW registration failed:', err);
+      });
+    });
+  }
+</script>
+
+<script src="js/threat.js"></script>
+
+<!-- Firebase SDKs (Load these ONCE only) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+
+<script src="config.js"></script>
+<!-- Your app logic loads AFTER the subscription check passes -->
+<script src="js/splash.js"></script>
+<script src="js/casha.js"></script>
+<script src="js/rate-limit.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ADLL.js"></script>
+<script src="js/hero.js"></script>
+</body>
+</html>

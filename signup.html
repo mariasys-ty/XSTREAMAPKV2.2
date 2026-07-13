@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Create your xStream account and start sharing videos.">
+  <title>Create Account — xStream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* =============================================
+       xStreamFilms — Netflix-Exact Signup
+       ============================================= */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body[data-page="signup"] #main-nav,
+    body[data-page="signup"] #main-footer { display: none !important; }
+
+    body[data-page="signup"] .auth-bg-shapes { display: none !important; }
+
+    body[data-page="signup"] {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #000 !important;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =============================================
+       BACKGROUND — Single Image, Top Only
+       ============================================= */
+    .xs-signup-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .xs-sbg-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 65%;
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+    }
+
+    .xs-sbg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fade from image into solid black */
+    body[data-page="signup"] .xs-signup-bg::after {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: 0;
+      right: 0;
+      height: 25%;
+      background: linear-gradient(to bottom, transparent, #000);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* =============================================
+       PAGE — Centered Layout
+       ============================================= */
+    body[data-page="signup"] .auth-page {
+      position: relative !important;
+      z-index: 2 !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      min-height: 100vh !important;
+      padding: 40px 20px !important;
+      margin: 0 !important;
+      background: none !important;
+      overflow-y: auto !important;
+    }
+
+    body[data-page="signup"] .auth-container {
+      width: 100% !important;
+      max-width: 450px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* =============================================
+       COLLAGE HERO — Character Strip Above Card
+       ============================================= */
+    .xs-hero-collage {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      margin-bottom: 0;
+      overflow: hidden;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .xs-hero-collage img {
+      position: absolute;
+      object-fit: cover;
+      object-position: center 15%;
+      display: block;
+    }
+
+    .xs-hc-1 { left: -5%; top: 0; width: 40%; height: 100%; z-index: 1; }
+    .xs-hc-2 { left: 20%; top: 0; width: 38%; height: 100%; z-index: 2; }
+    .xs-hc-3 { left: 42%; top: 0; width: 36%; height: 100%; z-index: 3; }
+    .xs-hc-4 { right: 0%;  top: 0; width: 40%; height: 100%; z-index: 2; }
+    .xs-hc-5 { right: -5%; top: 0; width: 38%; height: 100%; z-index: 1; }
+
+    .xs-hero-collage::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .xs-hero-brand {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: #e50914;
+      letter-spacing: -0.8px;
+      text-shadow: 0 2px 16px rgba(229, 9, 20, 0.6), 0 0 30px rgba(229, 9, 20, 0.2);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* =============================================
+       CARD — Netflix Transparent Dark Box
+       ============================================= */
+    body[data-page="signup"] .auth-card {
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+      border-radius: 0 0 4px 4px !important;
+      box-shadow: none !important;
+      padding: 32px 44px 40px !important;
+      overflow: visible !important;
+      display: flex !important;
+      flex-direction: column !important;
+      animation: xsCardIn 0.5s ease-out 0.2s both;
+    }
+
+    @keyframes xsCardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    body[data-page="signup"] .auth-header { display: none !important; }
+    body[data-page="signup"] .auth-divider { display: none !important; }
+    body[data-page="signup"] .auth-footer { display: none !important; }
+
+    /* =============================================
+       "Sign up" HEADING
+       ============================================= */
+    .xs-nf-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 26px;
+    }
+
+    /* =============================================
+       FORM
+       ============================================= */
+    body[data-page="signup"] .auth-form {
+      padding: 0 !important;
+      margin: 0 !important;
+      gap: 0 !important;
+      display: block !important;
+    }
+
+    body[data-page="signup"] .form-group { margin-bottom: 0 !important; }
+    body[data-page="signup"] .form-group label { display: none !important; }
+    body[data-page="signup"] .input-wrapper { display: block !important; }
+    body[data-page="signup"] .input-icon { display: none !important; }
+    body[data-page="signup"] .toggle-password { display: none !important; }
+    body[data-page="signup"] .form-error { display: none !important; }
+    body[data-page="signup"] .password-strength { display: none !important; }
+    body[data-page="signup"] .checkbox-label { display: none !important; }
+    body[data-page="signup"] .btn-google { display: none !important; }
+
+    /* =============================================
+       NETFLIX-EXACT INPUTS
+       ============================================= */
+    .xs-nf-input {
+      display: block;
+      width: 100%;
+      height: 50px;
+      background: #333;
+      border: none;
+      border-radius: 4px;
+      padding: 16px;
+      padding-top: 20px;
+      color: #fff;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: background 0.15s ease;
+      margin-bottom: 16px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .xs-nf-input:focus { background: #454545; }
+
+    .xs-nf-input::placeholder {
+      color: #8c8c8c;
+      font-size: 16px;
+    }
+
+    .xs-nf-input.xs-input-error {
+      border-bottom: 2px solid #e87c03;
+    }
+
+    /* =============================================
+       CONTINUE BUTTON
+       ============================================= */
+    .xs-continue-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50px;
+      background: #e50914;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      margin-top: 28px;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .xs-continue-btn:hover { background: #f40612; }
+    .xs-continue-btn:active { background: #c40010; }
+
+    .xs-continue-btn .btn-text {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .xs-continue-btn .btn-spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: xsSpin 0.6s linear infinite;
+    }
+
+    @keyframes xsSpin { to { transform: rotate(360deg); } }
+
+    /* =============================================
+       REMEMBER ME
+       ============================================= */
+    .xs-remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: #8c8c8c;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .xs-remember input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       OR DIVIDER
+       ============================================= */
+    .xs-or {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: #8c8c8c;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .xs-or::before,
+    .xs-or::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #8c8c8c;
+    }
+
+    /* =============================================
+       GOOGLE BUTTON
+       ============================================= */
+    .xs-google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 50px;
+      background: transparent;
+      border: 1px solid #8c8c8c;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      padding: 0;
+    }
+
+    .xs-google-btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: #b3b3b3;
+    }
+
+    .xs-google-btn:active {
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    .xs-nf-footer {
+      text-align: center;
+      padding: 20px 0 0;
+      font-size: 14px;
+      color: #8c8c8c;
+    }
+
+    .xs-nf-footer a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 400;
+      transition: text-decoration 0.15s;
+    }
+
+    .xs-nf-footer a:hover { text-decoration: underline; }
+
+    /* =============================================
+       reCAPTCHA TEXT
+       ============================================= */
+    .xs-recaptcha {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #8c8c8c;
+      line-height: 1.6;
+    }
+
+    .xs-recaptcha a {
+      color: #0071eb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .xs-recaptcha a:hover { color: #1a82ff; }
+
+    /* =============================================
+       ANIMATIONS
+       ============================================= */
+    .xs-signup-bg { animation: xsBgIn 0.8s ease-out both; }
+
+    @keyframes xsBgIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .xs-hero-collage {
+      animation: xsHeroIn 0.6s ease-out both;
+    }
+
+    @keyframes xsHeroIn {
+      from { opacity: 0; transform: scale(1.03); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* =============================================
+       RESPONSIVE — Tablet
+       ============================================= */
+    @media (max-width: 740px) {
+      body[data-page="signup"] .auth-card {
+        padding: 28px 32px 32px !important;
+      }
+
+      .xs-nf-title {
+        font-size: 28px;
+        margin-bottom: 22px;
+      }
+
+      .xs-hero-collage { height: 170px; }
+    }
+
+    /* =============================================
+       RESPONSIVE — Mobile
+       ============================================= */
+    @media (max-width: 500px) {
+      body[data-page="signup"] .auth-page {
+        padding: 24px 12px 40px !important;
+      }
+
+      body[data-page="signup"] .auth-card {
+        padding: 24px 24px 28px !important;
+        border-radius: 0 0 0 0 !important;
+      }
+
+      .xs-hero-collage {
+        height: 140px;
+        border-radius: 0;
+      }
+
+      .xs-hero-brand { font-size: 18px; bottom: 10px; }
+
+      .xs-nf-title {
+        font-size: 24px;
+        margin-bottom: 18px;
+      }
+
+      .xs-nf-input {
+        height: 48px;
+        padding: 14px;
+        padding-top: 18px;
+        font-size: 16px;
+        margin-bottom: 14px;
+      }
+
+      .xs-continue-btn { height: 48px; margin-top: 24px; }
+      .xs-google-btn { height: 48px; }
+      .xs-remember { font-size: 12px; }
+      .xs-recaptcha { font-size: 10px; margin-top: 18px; }
+      .xs-nf-footer { font-size: 13px; }
+
+      /* Background covers less on mobile */
+      .xs-sbg-image { height: 50%; }
+      .xs-sbg-overlay { height: 50%; }
+
+      body[data-page="signup"] .xs-signup-bg::after {
+        top: 35%;
+        height: 20%;
+      }
+
+      @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        body[data-page="signup"] .auth-page {
+          padding-bottom: calc(40px + env(safe-area-inset-bottom)) !important;
+        }
+      }
+    }
+
+    @media (max-width: 360px) {
+      body[data-page="signup"] .auth-card {
+        padding: 20px 18px 24px !important;
+      }
+
+      .xs-hero-collage { height: 120px; }
+    }
+
+    /* =============================================
+       ACCESSIBILITY
+       ============================================= */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .xs-nf-input:focus-visible,
+    .xs-continue-btn:focus-visible,
+    .xs-google-btn:focus-visible {
+      outline: 2px solid #0071eb;
+      outline-offset: 2px;
+    }
+
+    .xs-nf-footer a:focus-visible,
+    .xs-recaptcha a:focus-visible {
+      outline: 2px solid #0071eb;
+      outline-offset: 2px;
+    }
+
+    @media (forced-colors: active) {
+      .xs-nf-input { border: 2px solid CanvasText; }
+      .xs-continue-btn { border: 2px solid CanvasText; }
+      .xs-google-btn { border: 2px solid CanvasText; }
+    }
+
+    /* Scrollbar */
+    body[data-page="signup"] .auth-page::-webkit-scrollbar { width: 5px; }
+    body[data-page="signup"] .auth-page::-webkit-scrollbar-track { background: transparent; }
+    body[data-page="signup"] .auth-page::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  </style>
+</head>
+<body data-page="signup">
+
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+  <nav id="main-nav" class="navbar" aria-label="Main navigation"></nav>
+
+  <!-- Background: Single Image, Top Only, Fades to Black -->
+  <div class="xs-signup-bg" aria-hidden="true">
+    <div class="xs-sbg-image" style="background-image: url('https://ik.imagekit.io/s95tumxuk/IMG_3747.jpeg');"></div>
+    <div class="xs-sbg-overlay"></div>
+  </div>
+
+  <main class="auth-page" role="main">
+    <div class="auth-bg-shapes" aria-hidden="true" style="display:none;">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-card">
+
+        <!-- Collage Hero Strip -->
+        <div class="xs-hero-collage" aria-hidden="true">
+          <img class="xs-hc-1" src="https://ik.imagekit.io/s95tumxuk/IMG_3744.jpeg" alt="" loading="eager">
+          <img class="xs-hc-2" src="https://ik.imagekit.io/s95tumxuk/IMG_3743.jpeg" alt="" loading="eager">
+          <img class="xs-hc-3" src="https://ik.imagekit.io/s95tumxuk/IMG_3742.jpeg?updatedAt=1783870736878" alt="" loading="eager">
+          <img class="xs-hc-4" src="https://ik.imagekit.io/s95tumxuk/IMG_3750.jpeg" alt="" loading="lazy">
+          <img class="xs-hc-5" src="https://ik.imagekit.io/s95tumxuk/IMG_3747.jpeg"  alt="" loading="lazy">
+          <div class="xs-hero-brand">xStreamFilms</div>
+        </div>
+
+        <!-- Hidden original header -->
+        <div class="auth-header">
+          <a href="homepage.html" class="auth-logo">
+            <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#e63946"/><path d="M13 10l10 6-10 6V10z" fill="#fff"/></svg>
+            xStream
+          </a>
+          <h1>Create Account</h1>
+          <p>Join our community of creators and viewers</p>
+        </div>
+
+        <h1 class="xs-nf-title">Sign up</h1>
+
+        <div class="auth-divider">
+          <span>or continue with email</span>
+        </div>
+
+        <form id="signup-form" class="auth-form" novalidate>
+
+          <!-- First Name -->
+          <div class="form-group">
+            <label for="signup-name" aria-hidden="true">Full Name <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <svg class="input-icon" aria-hidden="true" style="display:none"><path d="M0 0"/></svg>
+              <input type="text" id="signup-name" class="xs-nf-input" placeholder="First Name" required minlength="2" autocomplete="given-name" aria-required="true">
+            </div>
+            <span class="form-error" id="signup-name-error" aria-hidden="true"></span>
+          </div>
+
+          <!-- Last Name -->
+          <input type="text" id="signup-lastname" class="xs-nf-input" placeholder="Last Name" autocomplete="family-name">
+
+          <!-- Email or Phone No -->
+          <div class="form-group">
+            <label for="signup-email" aria-hidden="true">Email Address <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <svg class="input-icon" aria-hidden="true" style="display:none"><path d="M0 0"/></svg>
+             <input type="email" id="signup-email" class="xs-nf-input" placeholder="Email address" required autocomplete="email" aria-required="true">
+            </div>
+            <span class="form-error" id="signup-email-error" aria-hidden="true"></span>
+          </div>
+
+          <!-- Create New Password -->
+          <div class="form-group">
+            <label for="signup-password" aria-hidden="true">Password <span class="required">*</span></label>
+            <div class="input-wrapper">
+              <svg class="input-icon" aria-hidden="true" style="display:none"><path d="M0 0"/></svg>
+              <input type="password" id="signup-password" class="xs-nf-input" placeholder="Create New Password" required minlength="6" autocomplete="new-password" aria-required="true">
+              <button type="button" class="toggle-password" data-target="signup-password" style="display:none" aria-hidden="true">
+                <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <div class="password-strength" id="password-strength" aria-hidden="true">
+              <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+              <span class="strength-text" id="strength-text"></span>
+            </div>
+            <span class="form-error" id="signup-password-error" aria-hidden="true"></span>
+          </div>
+          <!-- Hidden: Confirm Password (synced) -->
+          <div style="display:none!important;" aria-hidden="true">
+            <label for="signup-confirm-password">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" value="" autocomplete="new-password">
+            <button type="button" class="toggle-password" data-target="signup-confirm-password" style="display:none">
+              <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+            <span id="signup-confirm-password-error"></span>
+          </div>
+
+          <!-- Hidden: Terms checkbox (always checked) -->
+          <label class="checkbox-label" style="display:none!important;" aria-hidden="true">
+            <input type="checkbox" id="agree-terms" checked>
+            <span class="checkmark"></span>
+            I agree to the <a href="services.html" class="link-accent">Terms of Service</a> and <a href="privacy.html" class="link-accent">Privacy Policy</a>
+          </label>
+
+          <!-- Continue Button -->
+          <button type="submit" class="btn-accent btn-full btn-lg xs-continue-btn" id="signup-submit">
+            <span class="btn-text">Continue</span>
+            <div class="btn-spinner" style="display:none;"></div>
+          </button>
+        </form>
+
+        <!-- Remember Me -->
+        <label class="xs-remember">
+          <input type="checkbox" class="xs-remember-cb">
+          <span>Remember me</span>
+        </label>
+
+        <!-- OR Divider -->
+        <div class="xs-or">OR</div>
+
+        <!-- Google Sign Up -->
+        <button type="button" id="google-signup-btn" class="xs-google-btn" aria-label="Sign up with Google">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign up with Google
+        </button>
+
+        <!-- Footer -->
+        <div class="xs-nf-footer">
+          Already have an Account? <a href="login.html">Sign in</a>
+        </div>
+
+        <!-- reCAPTCHA Text -->
+        <div class="xs-recaptcha">
+          This page is protected by Google reCAPTCHA to ensure you're not a bot. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more.</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="main-footer" class="footer"></footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+  <!-- App Scripts (Must be AFTER Firebase and GSI) -->
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Compatibility sync & enhancement script (non-breaking) -->
+  <script>
+    (function() {
+      'use strict';
+      
+      var passField = document.getElementById('signup-password');
+      var confirmField = document.getElementById('signup-confirm-password');
+      
+      if (passField && confirmField) {
+        passField.addEventListener('input', function() {
+          confirmField.value = this.value;
+        });
+        var form = document.getElementById('signup-form');
+        if (form) {
+          form.addEventListener('submit', function() {
+            confirmField.value = passField.value;
+          }, true);
+        }
+      }
+      
+      var termsCb = document.getElementById('agree-terms');
+      if (termsCb) {
+        termsCb.checked = true;
+        termsCb.addEventListener('change', function(e) {
+          this.checked = true;
+        });
+      }
+      
+      var submitBtn = document.getElementById('signup-submit');
+      if (submitBtn) {
+        var textEl = submitBtn.querySelector('.btn-text');
+        var spinnerEl = submitBtn.querySelector('.btn-spinner');
+        var originalText = textEl ? textEl.textContent : 'Continue';
+        
+        var btnObserver = new MutationObserver(function() {
+          if (spinnerEl) {
+            if (spinnerEl.style.display === 'none' || spinnerEl.style.display === '') {
+              if (textEl) textEl.textContent = originalText;
+            } else {
+              if (textEl) textEl.textContent = 'Please wait...';
+            }
+          }
+        });
+        
+        if (spinnerEl) {
+          btnObserver.observe(spinnerEl, { attributes: true, attributeFilter: ['style'] });
+        }
+        btnObserver.observe(submitBtn, { attributes: true, attributeFilter: ['class'] });
+      }
+      
+      var errorSpans = document.querySelectorAll('.form-error[id$="-error"]');
+      errorSpans.forEach(function(span) {
+        var observer = new MutationObserver(function() {
+          var group = span.closest('.form-group');
+          if (!group) return;
+          var input = group.querySelector('.xs-nf-input');
+          if (!input) return;
+          if (span.textContent && span.textContent.trim() !== '') {
+            input.classList.add('xs-input-error');
+          } else {
+            input.classList.remove('xs-input-error');
+          }
+        });
+        observer.observe(span, { childList: true, characterData: true, subtree: true });
+      });
+      
+    })();
+  </script>
+</body>
+</html>

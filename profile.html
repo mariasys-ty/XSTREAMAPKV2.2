@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    (function() {
+      var DESKTOP_W = 1280;
+      var PHONE_MAX = 768;
+      var vps = document.querySelectorAll('meta[name="viewport"]');
+      var vp = vps[0];
+      for (var i = 1; i < vps.length; i++) vps[i].remove();
+      if (screen.width >= PHONE_MAX) {
+        vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+        return;
+      }
+      var s = screen.width / DESKTOP_W;
+      vp.setAttribute('content', 'width=' + DESKTOP_W + ',initial-scale=' + s);
+      window.addEventListener('resize', function() {
+        if (screen.width >= PHONE_MAX) {
+          vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+        } else {
+          var s2 = screen.width / DESKTOP_W;
+          vp.setAttribute('content', 'width=' + DESKTOP_W + ',initial-scale=' + s2);
+        }
+      });
+    })();
+  </script>
+  
+  <meta name="description" content="Your xStream profile and activity.">
+  <title>My Profile — xStream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ad.css">
+</head>
+<body data-page="profile">
+
+  <div id="toast-container"></div>
+  <nav id="main-nav" class="navbar"></nav>
+
+  <div id="mobile-overlay" class="mobile-overlay"></div>
+  <div id="mobile-menu" class="mobile-menu"></div>
+
+  <main class="profile-page">
+    <!-- Auth Guard -->
+    <div id="profile-auth-guard" style="display:none;" class="auth-guard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h2>Authentication Required</h2>
+      <p>You need to be signed in to view your profile.</p>
+      <div class="auth-guard-actions">
+        <a href="login.html" class="btn-accent">Sign In</a>
+        <a href="signup.html" class="btn-outline">Create Account</a>
+      </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div id="profile-content" style="display:none;">
+
+      <!-- PROFILE VIEW -->
+      <div id="pf-profile-view">
+
+        <!-- Avatar + Name + Email -->
+        <section class="pf-avatar-section">
+          <div class="pf-avatar-wrapper">
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <button class="pf-avatar-edit" title="Edit Profile Picture">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </button>
+          </div>
+          <h1 class="pf-name" id="profile-name">Loading...</h1>
+          <p class="pf-email" id="profile-email">—</p>
+        </section>
+
+        <!-- Stats Row -->
+        <section class="pf-stats-row">
+          <div class="pf-stat-card pf-stat-clickable" data-stat="Watch List">
+            <div class="pf-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <span class="pf-stat-number" id="stat-favourites">0</span>
+            <span class="pf-stat-label">Favourites</span>
+          </div>
+          <div class="pf-stat-card pf-stat-clickable" data-stat="downloads">
+            <div class="pf-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 8 12 3 17 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <span class="pf-stat-number" id="stat-downloads">0</span>
+            <span class="pf-stat-label">Downloads</span>
+          </div>
+          <div class="pf-stat-card pf-stat-clickable" data-stat="history">
+            <div class="pf-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="pf-stat-number" id="stat-history">0</span>
+            <span class="pf-stat-label">Watched</span>
+          </div>
+        </section>
+
+        <!-- Expandable Content Area -->
+        <div class="pf-expandable-content" id="pf-expandable-content" style="display:none;">
+          <div class="pf-expandable-inner" id="pf-expandable-inner"></div>
+        </div>
+
+        <!-- Account Section -->
+        <section class="pf-menu-section">
+          <h2 class="pf-section-title">Account</h2>
+          <div class="pf-section-card">
+            <div class="pf-menu-item">
+              <div class="pf-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <span class="pf-menu-label">Notifications</span>
+              <label class="pf-toggle">
+                <input type="checkbox" checked>
+                <span class="pf-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferences Section -->
+        <section class="pf-menu-section">
+          <h2 class="pf-section-title">Preferences</h2>
+          <div class="pf-section-card">
+            <div class="pf-menu-item">
+              <div class="pf-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              </div>
+              <span class="pf-menu-label">About Us</span>
+              <svg class="pf-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="pf-menu-item">
+              <div class="pf-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <span class="pf-menu-label">Appointments</span>
+              <svg class="pf-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Legal Section -->
+        <section class="pf-menu-section">
+          <h2 class="pf-section-title">Legal</h2>
+          <div class="pf-section-card">
+            <div class="pf-menu-item" id="pf-privacy-btn">
+              <div class="pf-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <span class="pf-menu-label">Privacy Policy</span>
+              <svg class="pf-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </section>
+
+          <!-- Support Section -->
+        <section class="pf-menu-section">
+          <h2 class="pf-section-title">Support</h2>
+          <div class="pf-section-card">
+            <div class="pf-menu-item" id="pf-help-btn">
+              <div class="pf-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <span class="pf-menu-label">Help Center</span>
+              <svg class="pf-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Hidden source containers for app.js -->
+        <div id="tab-favourites" style="display:none;">
+          <div id="profile-favourites-list" class="widget-video-list">
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          </div>
+        </div>
+        <div id="tab-downloads" style="display:none;">
+          <div id="storage-bar-container"></div>
+          <div id="profile-downloads-list" class="widget-video-list">
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          </div>
+        </div>
+        <div id="tab-history" style="display:none;">
+          <div id="profile-history-list" class="widget-video-list">
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+            <div class="skeleton-widget-item"><div class="skeleton skeleton-widget-thumb"></div><div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <section class="profile-links-section-wrapper">
+          <div id="profile-links"></div>
+        </section>
+        <!-- Sign Out -->
+        <button class="pf-signout-btn" id="sign-out-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+        <!-- Ad Banner -->
+        <div class="ad-banner-wrapper" id="ad-banner-bottom"></div>
+
+      </div>
+            <!-- HELP CENTER VIEW -->
+      <div id="pf-help-view" style="display:none;">
+
+        <!-- Back Button -->
+        <div class="pf-privacy-back" id="pf-help-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Back to Profile</span>
+        </div>
+
+        <!-- Help Header -->
+        <div class="pf-privacy-header">
+          <h1 class="pf-privacy-title">Help Center</h1>
+          <p class="pf-privacy-date">Find answers to frequently asked questions</p>
+        </div>
+
+        <!-- Help Search -->
+        <div class="pf-help-search">
+          <svg class="pf-help-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="pf-help-search-input" placeholder="Search for help articles..." autocomplete="off">
+        </div>
+
+        <!-- FAQ Sections -->
+        <div class="pf-help-faq">
+
+          <!-- Account & Profile -->
+          <section class="pf-faq-section" id="pf-faq-account">
+            <h2 class="pf-faq-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Account & Profile
+            </h2>
+            <div class="pf-faq-list">
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do I create an account?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Click the "Sign Up" button in the top navigation bar. Fill in your full name, email address, choose a secure password, select your country, enter your age, and agree to the Terms of Service.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>I forgot my password. How do I reset it?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Go to the Sign In page and click "Forgot Password?" Enter your email address and click "Send Reset Link". Check your inbox for the reset email.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do I delete my account?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Use the Contact page and select "Account Deletion" as the subject. Provide your account email. This action is irreversible.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Playback Issues -->
+          <section class="pf-faq-section" id="pf-faq-playback">
+            <h2 class="pf-faq-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>
+              Playback Issues
+            </h2>
+            <div class="pf-faq-list">
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>The video won't play. What should I try?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Try refreshing the page, clearing your browser cache, trying a different browser, disabling ad blockers, or checking your internet connection.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>The video keeps buffering.</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Pause the video for 10-15 seconds to let it buffer, close other tabs using bandwidth, or move closer to your Wi-Fi router.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>There is no sound in the video.</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Check your device volume and the video player's volume icon. Try a different video to see if the issue is specific to one video.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Browsing & Search -->
+          <section class="pf-faq-section" id="pf-faq-browse">
+            <h2 class="pf-faq-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Browsing & Search
+            </h2>
+            <div class="pf-faq-list">
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do I search for specific videos?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Use the search box on the home page. The search looks through video titles, descriptions, and country tags.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do I filter videos by category?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Click a category chip on the home page, use the "All Categories" dropdown in the filter bar, or click a category in the sidebar widget.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Likes & Interactions -->
+          <section class="pf-faq-section" id="pf-faq-interact">
+            <h2 class="pf-faq-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/></svg>
+              Likes & Interactions
+            </h2>
+            <div class="pf-faq-list">
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do likes and dislikes work?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Click thumbs up to like or thumbs down to dislike. You can only have one active reaction. Your preference is saved locally in your browser.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>Can I undo a like or dislike?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Yes, click the same button again to remove your reaction.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How are view counts calculated?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>A view is counted the first time a video is loaded. Refreshing does not increase the count.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Safety & Privacy -->
+          <section class="pf-faq-section" id="pf-faq-safety">
+            <h2 class="pf-faq-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Safety & Privacy
+            </h2>
+            <div class="pf-faq-list">
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>How do I report an inappropriate video?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Go to the Contact page and select "Report Content" as the subject. Provide the video title or URL and a description of the issue.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>Is my personal data secure?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>Yes. Your data is stored securely in Firebase with industry-standard encryption. We only collect minimum information needed.</p>
+                </div>
+              </div>
+              <div class="pf-faq-item">
+                <button class="pf-faq-question">
+                  <span>What is the minimum age requirement?</span>
+                  <svg class="pf-faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pf-faq-answer">
+                  <p>You must be at least 13 years old to create an account and use the platform.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Still Need Help -->
+        <div class="pf-help-cta">
+          <p class="pf-help-cta-text">Still need help?</p>
+          <a href="contact.html" class="pf-help-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Contact Support
+          </a>
+        </div>
+
+      </div>
+      <!-- PRIVACY POLICY VIEW -->
+      <div id="pf-privacy-view" style="display:none;">
+
+        <!-- Back Button -->
+        <div class="pf-privacy-back" id="pf-privacy-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Back to Profile</span>
+        </div>
+
+        <!-- Privacy Header -->
+        <div class="pf-privacy-header">
+          <h1 class="pf-privacy-title">Privacy Policy</h1>
+          <p class="pf-privacy-date">Last updated: January 2025</p>
+        </div>
+
+        <!-- Privacy Content -->
+        <div class="pf-privacy-content">
+
+          <!-- Table of Contents -->
+          <nav class="pf-privacy-toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              <li><a href="#priv-intro">Introduction</a></li>
+              <li><a href="#priv-collect">Information We Collect</a></li>
+              <li><a href="#priv-use">How We Use Your Information</a></li>
+              <li><a href="#priv-storage">Data Storage & Security</a></li>
+              <li><a href="#priv-sharing">Third-Party Sharing</a></li>
+              <li><a href="#priv-cookies">Cookies & Local Storage</a></li>
+              <li><a href="#priv-children">Children's Privacy</a></li>
+              <li><a href="#priv-rights">Your Rights</a></li>
+              <li><a href="#priv-changes">Changes to This Policy</a></li>
+              <li><a href="#priv-contact">Contact Us</a></li>
+            </ol>
+          </nav>
+
+          <!-- 1. Introduction -->
+          <section class="pf-privacy-section" id="priv-intro">
+            <h2>1. Introduction</h2>
+            <p>Welcome to Xstream movies ("we", "our", "us", "the Platform"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our video streaming and sharing services.</p>
+            <p>By accessing or using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with the terms of this Privacy Policy, please do not access the Platform.</p>
+            <p>We are committed to minimizing the data we collect and protecting what we do collect. This policy applies to all users of the Platform, including visitors who do not have an account.</p>
+          </section>
+
+          <!-- 2. Information We Collect -->
+          <section class="pf-privacy-section" id="priv-collect">
+            <h2>2. Information We Collect</h2>
+
+            <h3>2.1 Information You Provide Directly</h3>
+            <p>When you create an account, we collect:</p>
+            <ul>
+              <li><strong>Full Name</strong> — Displayed on your public profile and used to personalize your experience.</li>
+              <li><strong>Email Address</strong> — Used for account authentication, password recovery, and support communications.</li>
+              <li><strong>Password</strong> — Encrypted and never stored in plain text. Handled securely by Firebase Auth.</li>
+              <li><strong>Country</strong> — Displayed on your profile and attached to videos you upload for regional discovery.</li>
+              <li><strong>Age</strong> — Collected to verify you meet the minimum age requirement of 13 years.</li>
+            </ul>
+          
+            <p>When you contact us, we collect:</p>
+            <ul>
+              <li><strong>Message Content</strong> — The text of your support request or feedback.</li>
+              <li><strong>Subject & Video Links</strong> — Optional context you provide to help us assist you.</li>
+            </ul>
+
+            <h3>2.2 Information Collected Automatically</h3>
+            <ul>
+              <li><strong>User ID</strong> — A unique anonymous identifier assigned by Firebase Auth when you register.</li>
+              <li><strong>Interaction Data</strong> — Likes, dislikes, and view records stored locally in your browser (not sent to our servers except for view count increments).</li>
+            </ul>
+
+            <h3>2.3 Information We Do NOT Collect</h3>
+            <p>To be transparent, we want to clarify what we do <strong>not</strong> collect:</p>
+            <ul>
+              <li>We do not track your browsing history across other websites.</li>
+              <li>We do not collect your IP address, geolocation, or device information.</li>
+              <li>We do not use analytics trackers like Google Analytics.</li>
+              <li>We do not serve advertisements, so no ad-related data is collected.</li>
+              <li>We do not require or store payment information (the platform is free).</li>
+            </ul>
+          </section>
+
+          <!-- 3. How We Use Your Information -->
+          <section class="pf-privacy-section" id="priv-use">
+            <h2>3. How We Use Your Information</h2>
+            <p>We use the information we collect solely for the purpose of operating and improving the Platform:</p>
+            <ul>
+              <li><strong>Account Authentication</strong> — Your email and password are used to verify your identity and provide secure access to your account.</li>
+              <li><strong>Profile Display</strong> — Your name, country, join date, and uploaded videos are displayed on your public profile page.</li>
+              <li><strong>Video Hosting & Display</strong> — Your uploaded videos, thumbnails, titles, and descriptions are stored and displayed on the Platform for other users to watch.</li>
+              <li><strong>Platform Functionality</strong> — View counts are incremented when users watch your videos. Like/dislike counts are updated based on user interactions.</li>
+              <li><strong>Support Requests</strong> — Your contact form submissions are used to respond to your questions, issues, or feedback.</li>
+              <li><strong>Password Recovery</strong> — Your email is used to send password reset links when requested.</li>
+              <li><strong>Platform Integrity</strong> — We may use your data to investigate violations of our Terms of Service, such as inappropriate content uploads.</li>
+            </ul>
+            <p>We do <strong>not</strong> use your information for marketing, advertising, profiling, or selling to third parties.</p>
+          </section>
+
+          <!-- 4. Data Storage & Security -->
+          <section class="pf-privacy-section" id="priv-storage">
+            <h2>4. Data Storage & Security</h2>
+            <h3>4.1 Where Your Data Is Stored</h3>
+            <ul>
+              <li><strong>Account Data</strong> — Names, emails, countries, and ages are stored in Google Firebase Realtime Database, hosted on Google Cloud infrastructure.</li>
+              <li><strong>Authentication Data</strong> — Passwords and session tokens are managed by Firebase Auth, which uses industry-standard hashing (bcrypt/scrypt) and encryption.</li>
+              <li><strong>Contact Messages</strong> — Support submissions are stored in our Firebase database under the "contacts" node.</li>
+              <li><strong>Local Browser Data</strong> — Like/dislike history and viewed video IDs are stored in your browser's localStorage. This data never leaves your device.</li>
+            </ul>
+
+            <h3>4.2 Security Measures</h3>
+            <ul>
+              <li>All data transmission between your browser and our servers is encrypted using TLS/SSL (HTTPS).</li>
+              <li>Passwords are never stored in plain text — they are hashed by Firebase Auth before storage.</li>
+              <li>Firebase database security rules restrict data access to authenticated operations where required.</li>
+            </ul>
+
+            <h3>4.3 Data Retention</h3>
+            <p>Your account data and uploaded videos are retained for as long as your account exists. If you request account deletion, all your personal data and uploaded content will be permanently removed from our servers. Contact form submissions are retained for up to 90 days after resolution for quality assurance purposes.</p>
+          </section>
+
+          <!-- 5. Third-Party Sharing -->
+          <section class="pf-privacy-section" id="priv-sharing">
+            <h2>5. Third-Party Sharing</h2>
+            <p>We do not sell, rent, trade, or otherwise share your personal information with third parties for their own marketing or commercial purposes.</p>
+            <p>We do share data with the following service providers, strictly for the purpose of operating the Platform:</p>
+            <ul>
+              <li><strong>Google Firebase</strong> — Provides our database, authentication, and hosting infrastructure. Google's privacy policy applies to data processed by Firebase: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></li>
+              <li><strong>Google Fonts</strong> — Fonts are loaded from Google's CDN. Google may collect standard CDN access logs per their privacy policy.</li>
+            </ul>
+            <p>We may also disclose information if required by law, such as in response to a valid legal process, court order, or government request.</p>
+          </section>
+
+          <!-- 6. Cookies & Local Storage -->
+          <section class="pf-privacy-section" id="priv-cookies">
+            <h2>6. Cookies & Local Storage</h2>
+            <p>We use minimal browser storage technologies:</p>
+            <ul>
+              <li><strong>Firebase Auth Cookies</strong> — Firebase sets authentication cookies to maintain your login session. These are essential for the Platform to function and cannot be disabled without losing the ability to stay logged in.</li>
+              <li><strong>localStorage</strong> — We store your like/dislike history and viewed video IDs in your browser's localStorage under keys prefixed with "sv_". This data stays on your device and is not transmitted to our servers.</li>
+            </ul>
+            <p>We do <strong>not</strong> use tracking cookies, advertising cookies, or analytics cookies.</p>
+          </section>
+
+          <!-- 7. Children's Privacy -->
+          <section class="pf-privacy-section" id="priv-children">
+            <h2>7. Children's Privacy</h2>
+            <p>The Platform is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. During registration, users must confirm they are at least 13 years old by entering their date of birth or age.</p>
+            <p>If we become aware that a child under 13 has provided us with personal information, we will take steps to delete that information from our servers. If you believe a child under 13 has registered on our Platform, please contact us immediately.</p>
+          </section>
+
+          <!-- 8. Your Rights -->
+          <section class="pf-privacy-section" id="priv-rights">
+            <h2>8. Your Rights</h2>
+            <p>You have the following rights regarding your personal data:</p>
+            <ul>
+              <li><strong>Access</strong> — You can view all data associated with your account by visiting your profile page and reviewing your uploaded videos.</li>
+              <li><strong>Correction</strong> — You can update your display name by contacting support. Other profile details may be editable in future updates.</li>
+              <li><strong>Deletion</strong> — You can request full account deletion through our Contact page. This will permanently remove your account data and all uploaded videos.</li>
+              <li><strong>Data Portability</strong> — You can download your videos from your profile page. For other data requests, contact support.</li>
+              <li><strong>Withdrawal of Consent</strong> — You can withdraw consent at any time by deleting your account or clearing your browser's localStorage.</li>
+              <li><strong>Lodging a Complaint</strong> — If you believe we have not handled your data appropriately, you have the right to lodge a complaint with a relevant data protection authority.</li>
+            </ul>
+            <p>To exercise any of these rights, please contact us with "Privacy Request" as the subject.</p>
+          </section>
+
+          <!-- 9. Changes -->
+          <section class="pf-privacy-section" id="priv-changes">
+            <h2>9. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. When we make changes, we will update the "Last updated" date at the top of this page.</p>
+            <p>We encourage you to review this Privacy Policy periodically to stay informed about how we protect your information. Your continued use of the Platform after any changes constitutes your acceptance of the updated policy.</p>
+          </section>
+
+          <!-- 10. Contact -->
+          <section class="pf-privacy-section" id="priv-contact">
+            <h2>10. Contact Us</h2>
+            <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out through any of the following channels:</p>
+            <ul>
+              <li><strong>Email:</strong> <a href="mailto:support@xstream.com">support@xstream.com</a></li>
+              <li><strong>Contact Form:</strong> <a href="contact.html">xstream.com/contact.html</a></li>
+              <li><strong>Help Center:</strong> <a href="helpcenter.html">xstream.com/helpcenter.html</a></li>
+            </ul>
+            <p>We aim to respond to all privacy-related requests within 30 days.</p>
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+  
+  <footer id="main-footer" class="footer"></footer>
+  
+  <script src="js/offline-manager.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').catch(function(err) {
+          console.warn('SW registration failed:', err);
+        });
+      });
+    }
+  </script>
+  
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="js/optimizer.js"></script>
+  <script src="js/threat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ad.js"></script>
+  <script>
+    /* View Switching: Profile / Privacy / Help Center */
+    (function() {
+      var profileView = document.getElementById('pf-profile-view');
+      var privacyView = document.getElementById('pf-privacy-view');
+      var helpView = document.getElementById('pf-help-view');
+      
+      function showView(viewToShow) {
+        profileView.style.display = 'none';
+        privacyView.style.display = 'none';
+        helpView.style.display = 'none';
+        viewToShow.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      
+      /* Event delegation for all view switches */
+      document.addEventListener('click', function(e) {
+        /* Privacy Policy button */
+        if (e.target.closest('#pf-privacy-btn')) {
+          e.preventDefault();
+          e.stopPropagation();
+          showView(privacyView);
+        }
+        /* Privacy back button */
+        if (e.target.closest('#pf-privacy-back')) {
+          e.preventDefault();
+          e.stopPropagation();
+          showView(profileView);
+        }
+        /* Help Center button */
+        if (e.target.closest('#pf-help-btn')) {
+          e.preventDefault();
+          e.stopPropagation();
+          showView(helpView);
+        }
+        /* Help back button */
+        if (e.target.closest('#pf-help-back')) {
+          e.preventDefault();
+          e.stopPropagation();
+          showView(profileView);
+        }
+      }, true);
+      
+      /* Smooth scroll for Privacy TOC links */
+      document.addEventListener('click', function(e) {
+        var tocLink = e.target.closest('.pf-privacy-toc a');
+        if (tocLink) {
+          e.preventDefault();
+          var href = tocLink.getAttribute('href');
+          var target = privacyView.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    })();
+  </script>
+  
+  <script>
+    /* FAQ Accordion & Search for Help Center */
+    (function() {
+      /* Accordion */
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.pf-faq-question');
+        if (!btn) return;
+        var item = btn.closest('.pf-faq-item');
+        if (!item) return;
+        var isOpen = item.classList.contains('open');
+        var list = item.parentElement;
+        var siblings = list.querySelectorAll('.pf-faq-item');
+        for (var j = 0; j < siblings.length; j++) {
+          siblings[j].classList.remove('open');
+        }
+        if (!isOpen) item.classList.add('open');
+      });
+      
+      /* Search */
+      var doHelpSearch = function() {
+        var input = document.getElementById('pf-help-search-input');
+        if (!input) return;
+        var q = input.value.trim().toLowerCase();
+        var allItems = helpView.querySelectorAll('.pf-faq-item');
+        var allSections = helpView.querySelectorAll('.pf-faq-section');
+        if (!q) {
+          for (var i = 0; i < allItems.length; i++) {
+            allItems[i].style.display = '';
+            allItems[i].classList.remove('open');
+          }
+          for (var s = 0; s < allSections.length; s++) {
+            allSections[s].style.display = '';
+          }
+          return;
+        }
+        for (var i = 0; i < allItems.length; i++) {
+          var text = allItems[i].textContent.toLowerCase();
+          var match = text.indexOf(q) >= 0;
+          allItems[i].style.display = match ? '' : 'none';
+          if (match) allItems[i].classList.add('open');
+        }
+        for (var s = 0; s < allSections.length; s++) {
+          var visible = allSections[s].querySelectorAll('.pf-faq-item:not([style*="display: none"])');
+          allSections[s].style.display = visible.length > 0 ? '' : 'none';
+        }
+      };
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.target.id === 'pf-help-search-input' && e.key === 'Enter') {
+          doHelpSearch();
+        }
+      });
+      
+      /* Live search on input */
+      document.addEventListener('input', function(e) {
+        if (e.target.id === 'pf-help-search-input') {
+          doHelpSearch();
+        }
+      });
+    })();
+  </script>
+  <script>
+    /* Stat cards toggle — Event Delegation (survives app.js re-renders) */
+    (function() {
+      var activeStat = null;
+      var expandArea = document.getElementById('pf-expandable-content');
+      var expandInner = document.getElementById('pf-expandable-inner');
+      var sourceLists = {
+        favourites: document.getElementById('profile-favourites-list'),
+        downloads: document.getElementById('profile-downloads-list'),
+        history: document.getElementById('profile-history-list')
+      };
+      
+      function renderContent(type) {
+        var source = sourceLists[type];
+        if (!source) return;
+        sourceLists[type] = document.getElementById(type === 'favourites' ? 'profile-favourites-list' : type === 'downloads' ? 'profile-downloads-list' : 'profile-history-list');
+        source = sourceLists[type];
+        if (!source) return;
+        
+        var html = '';
+        var children = Array.prototype.slice.call(source.children);
+        
+        if (children.length === 0) {
+          html = '<div class="pf-empty-state">No items</div>';
+        } else {
+          children.forEach(function(child) {
+            if (child.id === 'storage-bar-container') {
+              var barHTML = child.innerHTML.trim();
+              if (barHTML) html += '<div class="pf-storage-bar">' + barHTML + '</div>';
+              return;
+            }
+            if (child.innerHTML && child.innerHTML.trim().length > 0) {
+              html += child.outerHTML;
+            }
+          });
+          if (!html.trim()) html = '<div class="pf-empty-state">No items</div>';
+        }
+        expandInner.innerHTML = html;
+      }
+      
+      function toggleStat(stat) {
+        var cards = document.querySelectorAll('.pf-stat-clickable');
+        cards.forEach(function(c) { c.classList.remove('pf-stat-active'); });
+        
+        if (activeStat === stat) {
+          expandArea.style.display = 'none';
+          activeStat = null;
+          return;
+        }
+        
+        var clicked = document.querySelector('.pf-stat-clickable[data-stat="' + stat + '"]');
+        if (clicked) clicked.classList.add('pf-stat-active');
+        activeStat = stat;
+        renderContent(stat);
+        expandArea.style.display = 'block';
+      }
+      
+      document.addEventListener('click', function(e) {
+        var card = e.target.closest('.pf-stat-clickable');
+        if (!card) return;
+        e.preventDefault();
+        e.stopPropagation();
+        var stat = card.getAttribute('data-stat');
+        if (stat) toggleStat(stat);
+      }, true);
+      
+      var observer = new MutationObserver(function() {
+        if (activeStat) renderContent(activeStat);
+      });
+      
+      function startObserving() {
+        Object.keys(sourceLists).forEach(function(key) {
+          var el = document.getElementById(key === 'favourites' ? 'profile-favourites-list' : key === 'downloads' ? 'profile-downloads-list' : 'profile-history-list');
+          if (el) {
+            sourceLists[key] = el;
+            observer.observe(el, { childList: true, subtree: true, characterData: true });
+          }
+        });
+      }
+      
+      startObserving();
+      
+      document.addEventListener('profileReady', function() {
+        startObserving();
+        if (activeStat) {
+          setTimeout(function() { renderContent(activeStat); }, 300);
+          setTimeout(function() { renderContent(activeStat); }, 1200);
+        }
+      });
+      
+      setInterval(function() {
+        Object.keys(sourceLists).forEach(function(key) {
+          var id = key === 'favourites' ? 'profile-favourites-list' : key === 'downloads' ? 'profile-downloads-list' : 'profile-history-list';
+          var el = document.getElementById(id);
+          if (el && el !== sourceLists[key]) {
+            sourceLists[key] = el;
+            observer.observe(el, { childList: true, subtree: true, characterData: true });
+          }
+        });
+        if (activeStat) renderContent(activeStat);
+      }, 2000);
+    })();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof AdSystem !== 'undefined') {
+        AdSystem.init('ad-banner-top', { position: 'all', maxAds: 10 });
+        AdSystem.init('ad-banner-bottom', { position: 'all', maxAds: 10 });
+      }
+    });
+    document.addEventListener('profileReady', function() {
+      if (typeof AdSystem !== 'undefined') {
+        AdSystem.init('ad-banner-top', { position: 'all', maxAds: 10 });
+        AdSystem.init('ad-banner-bottom', { position: 'all', maxAds: 10 });
+      }
+    });
+  </script>
+</body>
+</html>
